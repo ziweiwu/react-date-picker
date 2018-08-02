@@ -1,0 +1,181 @@
+@import "../node_modules/@hig/styles/build/index.css";
+@import "../node_modules/@hig/styles/mixins/colors";
+@import "../node_modules/@hig/styles/mixins/shadows";
+@import "../node_modules/@hig/styles/mixins/typography";
+@import "../node_modules/@hig/styles/tokens/layers";
+
+$datepicker__border-radius: 0.2rem;
+$datepicker__day-margin: 0.166rem;
+$datepicker__font-family: ArtifaktElement, sans-serif;
+$datepicker__font-size: 14px;
+$datepicker__item-size: 1.7rem;
+$datepicker__margin: 0.4rem;
+$datepicker__navigation-size: 0.45rem;
+$datepicker__triangle-size: 8px;
+
+$datepicker__background-color: #ffffff;
+$datepicker__border-color: #D4DBE1;
+$datepicker__highlighted-color: #87BC40;
+$datepicker__muted-color: #999999;
+$datepicker__outsideMonth-color: #999999;
+$datepicker__selected-color: #0696d7;
+$datepicker__text-color: #222934;
+$datepicker__header-color: #222934;
+$datepicker__navigation-disabled-color: lighten($datepicker__muted-color, 20%);
+
+// disable selection highlighting for calender
+// https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting
+.react-datepicker {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 16px;
+  box-shadow: 0 0 4px color(hig-cool-gray-30);
+}
+
+// hide the days from prev and next month in current month
+.react-datepicker__day--outside-month {
+  visibility: hidden;
+}
+
+.react-datepicker__day {
+  width: 2.5em;
+  border-radius: 0 !important;
+  margin: 0 !important; width: 30px !important;
+  height: 30px !important;
+
+  // today's date in hig blue color and bold when not hovered or selected
+  &--today:not(&--selected):not(:hover):not(&--disabled):not(&--in-range):not(&--in-selecting-range):not(&--keyboard-selected) {
+    font-weight: bold;
+    color: #0696D7
+  }
+
+  // hover background and font color for calender days that are not disabled
+  &:hover:not(&--disabled) {
+    background-color: lighten($datepicker__selected-color, 20%) !important;
+    color: white;
+  }
+
+  // prevent hover color for disabled days
+  &--disabled {
+    border-right-color: $datepicker__navigation-disabled-color;
+    background-color: white !important;
+  }
+
+  // color for dates in range selection
+  &--in-selecting-range:not(&--in--range) {
+    background-color: lighten($datepicker__selected-color, 30%) !important;
+  }
+}
+
+// font size for portal view header
+.react-datepicker__current-month {
+  margin-top: 8px !important;
+  font-size: 14px !important;
+  color: #222934 !important;
+}
+
+//set the hover cover of close button icons
+svg:hover {
+  polygon {
+    fill: #28d2be;
+  }
+  circle {
+    stroke: #28d2be;
+  }
+}
+
+//day name
+.react-datepicker__day-names {
+  opacity: 0.5;
+  margin-left: 16px;
+  margin-right: 16px;
+  margin-top: 10px;
+}
+
+.react-datepicker__day-name {
+  width: 30px;
+  height: 30px;
+  margin: 1px !important;
+}
+
+// using hig chevron right and left icon for navigation
+// used svg uri converter to convert svg to background images
+button.react-datepicker__navigation {
+  text-align: center;
+  cursor: pointer;
+  position: absolute;
+  top: 15px;
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  border: none;
+  z-index: 1;
+
+  &--previous {
+    margin-left: 8px;
+    background-image: url("data:image/svg+xml,%3Csvg id='assets' xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Ctitle%3Ecaret-left-16%3C/title%3E%3Cpolygon points='3.65 8.09 9.95 1.79 11.72 3.56 7.18 8.09 11.72 12.63 9.95 14.4 3.65 8.09'/%3E%3C/svg%3E");
+    &:hover {
+      background-image: url("data:image/svg+xml,%3Csvg id='assets' fill='#28d2be' xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Ctitle%3Ecaret-left-16%3C/title%3E%3Cpolygon points='3.65 8.09 9.95 1.79 11.72 3.56 7.18 8.09 11.72 12.63 9.95 14.4 3.65 8.09'/%3E%3C/svg%3E");
+    }
+  }
+  &--next {
+    margin-right: 8px;
+    background-image: url("data:image/svg+xml,%3Csvg id='assets' xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Ctitle%3Ecaret-right-16%3C/title%3E%3Cpolygon points='4.28 12.63 8.82 8.09 4.28 3.56 6.05 1.79 12.35 8.09 6.05 14.4 4.28 12.63'/%3E%3C/svg%3E");
+    &:hover {
+      background-image: url("data:image/svg+xml,%3Csvg id='assets' fill='#28d2be' xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Ctitle%3Ecaret-right-16%3C/title%3E%3Cpolygon points='4.28 12.63 8.82 8.09 4.28 3.56 6.05 1.79 12.35 8.09 6.05 14.4 4.28 12.63'/%3E%3C/svg%3E");
+    }
+  }
+}
+
+/* Time container setting */
+.react-datepicker__time-container {
+  font-size: 20px;
+
+  .react-datepicker__header--time {
+    height: 55.281px;
+    padding-bottom: 0px;
+  }
+
+  .react-datepicker__time-list {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
+
+/* Hig TextField Style */
+.hig__text-field-v1 {
+  min-width: 230px;
+}
+
+.hig__text-field-v1__input-wrapper {
+  &:hover {
+    border-color: #28d2be;
+    box-shadow: 0 1px 0 #28d2be;
+  }
+}
+
+// hover color for calender icon
+//.hig__text-field-v1__icon:hover {
+//  path {
+//     fill: #28d2be;
+//  }
+//}
+
+.hig__text-field-v1__label {
+  font-size: 14px;
+}
+
+button.hig__icon-button {
+  background-color: transparent;
+  border: none;
+  padding-top: 5px;
+}
+
+// Overrides the stylesheet for react-datepicker library below
+@import 'react-datepicker/src/stylesheets/datepicker';

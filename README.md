@@ -1,16 +1,35 @@
 # react-hig-datepicker
 
-[![Travis][build-badge]][build]
-[![npm package][npm-badge]][npm]
-[![Coveralls][coveralls-badge]][coveralls]
+Build a simple date picker component with HIG element and style
+- based on react-datepicker https://github.com/Hacker0x01/react-datepicker/
 
-Describe react-hig-datepicker here.
+## Demo
+demo link: https://ziweiwu.github.io/fusion-hig-prototyping
 
-[build-badge]: https://img.shields.io/travis/user/repo/master.png?style=flat-square
-[build]: https://travis-ci.org/user/repo
+## Usage Example
+```
+import DatePicker from 'react-hig-datepicker'
 
-[npm-badge]: https://img.shields.io/npm/v/npm-package.png?style=flat-square
-[npm]: https://www.npmjs.org/package/npm-package
+export default class Default extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      startDate: undefined,
+    };
+    this.handleChangeDate = this.handleChangeDate.bind(this);
+  }
 
-[coveralls-badge]: https://img.shields.io/coveralls/user/repo/master.png?style=flat-square
-[coveralls]: https://coveralls.io/github/user/repo
+  handleChangeDate(date) {
+    this.setState({ startDate: date });
+  }
+
+  render() {
+    return (
+      <DatePicker
+        selected={this.state.startDate}
+        onChange={this.handleChangeDate}
+      />
+    );
+  }
+}
+```
