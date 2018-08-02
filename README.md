@@ -9,6 +9,7 @@ demo link: https://ziweiwu.github.io/fusion-hig-prototyping
 ## Usage Example
 ```
 import DatePicker from 'react-hig-datepicker'
+import 'react-hig-datepicker/lib/datePicker.css';
 
 export default class Default extends Component {
   constructor(props) {

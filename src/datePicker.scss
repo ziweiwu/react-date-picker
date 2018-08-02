@@ -1,8 +1,8 @@
-@import "../node_modules/@hig/styles/build/index.css";
-@import "../node_modules/@hig/styles/mixins/colors";
-@import "../node_modules/@hig/styles/mixins/shadows";
-@import "../node_modules/@hig/styles/mixins/typography";
-@import "../node_modules/@hig/styles/tokens/layers";
+@import "~@hig/styles/build/index.css";
+@import "~@hig/styles/mixins/colors";
+@import "~@hig/styles/mixins/shadows";
+@import "~@hig/styles/mixins/typography";
+@import "~@hig/styles/tokens/layers";
 
 $datepicker__border-radius: 0.2rem;
 $datepicker__day-margin: 0.166rem;
