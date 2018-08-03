@@ -1,0 +1,916 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatePicker Snapshot tests calender Popper 1`] = `
+ShallowWrapper {
+  "complexSelector": ComplexSelector {
+    "buildPredicate": [Function],
+    "childrenOfNode": [Function],
+    "findWhereUnwrapped": [Function],
+  },
+  "length": 1,
+  "node": <DatePicker
+    allowSameDay={false}
+    calender={true}
+    className="hig__text-field-v1__input"
+    closeOnSelect={true}
+    customInput={
+        <TextFieldPresenter
+            disabled={true}
+            focused={true}
+            icon={
+                <Icon
+                    nameOrSVG="calendar"
+                    size="24"
+                />
+            }
+            id="text-field-36491"
+            instructions={undefined}
+            label={undefined}
+            onBlur={null}
+            onClearButtonClick={[Function]}
+            onFocus={null}
+            placeholder={undefined}
+            readOnly={true}
+            showClearButton={false}
+            type="text"
+        />
+    }
+    dateFormat="L"
+    dateFormatCalendar="MMMM YYYY"
+    disabled={false}
+    disabledKeyboardNavigation={false}
+    dropdownMode="scroll"
+    fixedHeight={true}
+    focused={true}
+    hidePopper={false}
+    id="hig__date-picker"
+    isClearable={false}
+    monthsShown={1}
+    onBlur={[Function]}
+    onChange={[Function]}
+    onClickOutside={[Function]}
+    onFocus={[Function]}
+    onKeyDown={[Function]}
+    onMonthChange={[Function]}
+    onSelect={[Function]}
+    onYearChange={[Function]}
+    popperModifiers={
+        Object {
+            "flip": Object {
+              "enabled": false,
+            },
+            "offset": Object {
+              "enabled": true,
+              "offset": "0px, 0px",
+            },
+            "preventOverflow": Object {
+              "enabled": true,
+              "escapeWithReference": false,
+            },
+          }
+    }
+    popperPlacement="bottom-start"
+    preventOpenOnFocus={false}
+    readOnly={true}
+    selected={"2017-09-15T13:30:00.000Z"}
+    shouldCloseOnSelect={true}
+    showClearButton={false}
+    showIcon={true}
+    showInstruction={false}
+    showLabel={true}
+    showMonthDropdown={false}
+    showMonthYearDropdown={false}
+    showTimeSelect={false}
+    showYearDropdown={false}
+    timeCaption="Time"
+    timeIntervals={30}
+    withPortal={false}
+/>,
+  "nodes": Array [
+    <DatePicker
+      allowSameDay={false}
+      calender={true}
+      className="hig__text-field-v1__input"
+      closeOnSelect={true}
+      customInput={
+            <TextFieldPresenter
+                  disabled={true}
+                  focused={true}
+                  icon={
+                        <Icon
+                              nameOrSVG="calendar"
+                              size="24"
+                        />
+                  }
+                  id="text-field-36491"
+                  instructions={undefined}
+                  label={undefined}
+                  onBlur={null}
+                  onClearButtonClick={[Function]}
+                  onFocus={null}
+                  placeholder={undefined}
+                  readOnly={true}
+                  showClearButton={false}
+                  type="text"
+            />
+      }
+      dateFormat="L"
+      dateFormatCalendar="MMMM YYYY"
+      disabled={false}
+      disabledKeyboardNavigation={false}
+      dropdownMode="scroll"
+      fixedHeight={true}
+      focused={true}
+      hidePopper={false}
+      id="hig__date-picker"
+      isClearable={false}
+      monthsShown={1}
+      onBlur={[Function]}
+      onChange={[Function]}
+      onClickOutside={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onMonthChange={[Function]}
+      onSelect={[Function]}
+      onYearChange={[Function]}
+      popperModifiers={
+            Object {
+                  "flip": Object {
+                    "enabled": false,
+                  },
+                  "offset": Object {
+                    "enabled": true,
+                    "offset": "0px, 0px",
+                  },
+                  "preventOverflow": Object {
+                    "enabled": true,
+                    "escapeWithReference": false,
+                  },
+                }
+      }
+      popperPlacement="bottom-start"
+      preventOpenOnFocus={false}
+      readOnly={true}
+      selected={"2017-09-15T13:30:00.000Z"}
+      shouldCloseOnSelect={true}
+      showClearButton={false}
+      showIcon={true}
+      showInstruction={false}
+      showLabel={true}
+      showMonthDropdown={false}
+      showMonthYearDropdown={false}
+      showTimeSelect={false}
+      showYearDropdown={false}
+      timeCaption="Time"
+      timeIntervals={30}
+      withPortal={false}
+/>,
+  ],
+  "options": Object {},
+  "renderer": ReactShallowRenderer {
+    "_context": Object {},
+    "_element": <DatePicker
+      closeOnSelect={true}
+      disabled={false}
+      fixedHeight={true}
+      focused={true}
+      hidePopper={false}
+      selected={"2017-09-15T13:30:00.000Z"}
+      shouldCloseOnSelect={true}
+      showClearButton={false}
+      showIcon={true}
+      showInstruction={false}
+      showLabel={true}
+/>,
+    "_forcedUpdate": false,
+    "_instance": DatePicker {
+      "context": Object {},
+      "props": Object {
+        "closeOnSelect": true,
+        "disabled": false,
+        "fixedHeight": true,
+        "focused": true,
+        "hidePopper": false,
+        "selected": "2017-09-15T13:30:00.000Z",
+        "shouldCloseOnSelect": true,
+        "showClearButton": false,
+        "showIcon": true,
+        "showInstruction": false,
+        "showLabel": true,
+      },
+      "refs": Object {},
+      "state": null,
+      "updater": Updater {
+        "_callbacks": Array [],
+        "_renderer": [Circular],
+      },
+    },
+    "_newState": null,
+    "_rendered": <DatePicker
+      allowSameDay={false}
+      calender={true}
+      className="hig__text-field-v1__input"
+      closeOnSelect={true}
+      customInput={
+            <TextFieldPresenter
+                  disabled={true}
+                  focused={true}
+                  icon={
+                        <Icon
+                              nameOrSVG="calendar"
+                              size="24"
+                        />
+                  }
+                  id="text-field-36491"
+                  instructions={undefined}
+                  label={undefined}
+                  onBlur={null}
+                  onClearButtonClick={[Function]}
+                  onFocus={null}
+                  placeholder={undefined}
+                  readOnly={true}
+                  showClearButton={false}
+                  type="text"
+            />
+      }
+      dateFormat="L"
+      dateFormatCalendar="MMMM YYYY"
+      disabled={false}
+      disabledKeyboardNavigation={false}
+      dropdownMode="scroll"
+      fixedHeight={true}
+      focused={true}
+      hidePopper={false}
+      id="hig__date-picker"
+      isClearable={false}
+      monthsShown={1}
+      onBlur={[Function]}
+      onChange={[Function]}
+      onClickOutside={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onMonthChange={[Function]}
+      onSelect={[Function]}
+      onYearChange={[Function]}
+      popperModifiers={
+            Object {
+                  "flip": Object {
+                    "enabled": false,
+                  },
+                  "offset": Object {
+                    "enabled": true,
+                    "offset": "0px, 0px",
+                  },
+                  "preventOverflow": Object {
+                    "enabled": true,
+                    "escapeWithReference": false,
+                  },
+                }
+      }
+      popperPlacement="bottom-start"
+      preventOpenOnFocus={false}
+      readOnly={true}
+      selected={"2017-09-15T13:30:00.000Z"}
+      shouldCloseOnSelect={true}
+      showClearButton={false}
+      showIcon={true}
+      showInstruction={false}
+      showLabel={true}
+      showMonthDropdown={false}
+      showMonthYearDropdown={false}
+      showTimeSelect={false}
+      showYearDropdown={false}
+      timeCaption="Time"
+      timeIntervals={30}
+      withPortal={false}
+/>,
+    "_rendering": false,
+    "_updater": Updater {
+      "_callbacks": Array [],
+      "_renderer": [Circular],
+    },
+    "getRenderOutput": [Function],
+    "render": [Function],
+  },
+  "root": [Circular],
+  "unrendered": <DatePicker
+    closeOnSelect={true}
+    disabled={false}
+    fixedHeight={true}
+    focused={true}
+    hidePopper={false}
+    selected={"2017-09-15T13:30:00.000Z"}
+    shouldCloseOnSelect={true}
+    showClearButton={false}
+    showIcon={true}
+    showInstruction={false}
+    showLabel={true}
+/>,
+}
+`;
+
+exports[`DatePicker Snapshot tests disabled view 1`] = `
+ShallowWrapper {
+  "complexSelector": ComplexSelector {
+    "buildPredicate": [Function],
+    "childrenOfNode": [Function],
+    "findWhereUnwrapped": [Function],
+  },
+  "length": 1,
+  "node": <DatePicker
+    allowSameDay={false}
+    calender={true}
+    className="hig__text-field-v1__input"
+    closeOnSelect={true}
+    customInput={
+        <TextFieldPresenter
+            disabled={true}
+            focused={true}
+            icon={
+                <Icon
+                    nameOrSVG="calendar"
+                    size="24"
+                />
+            }
+            id="text-field-36491"
+            instructions={undefined}
+            label={undefined}
+            onBlur={null}
+            onClearButtonClick={[Function]}
+            onFocus={null}
+            placeholder={undefined}
+            readOnly={true}
+            showClearButton={false}
+            type="text"
+        />
+    }
+    dateFormat="L"
+    dateFormatCalendar="MMMM YYYY"
+    disabled={true}
+    disabledKeyboardNavigation={false}
+    dropdownMode="scroll"
+    fixedHeight={true}
+    focused={true}
+    id="hig__date-picker"
+    isClearable={false}
+    monthsShown={1}
+    onBlur={[Function]}
+    onChange={[Function]}
+    onClickOutside={[Function]}
+    onFocus={[Function]}
+    onKeyDown={[Function]}
+    onMonthChange={[Function]}
+    onSelect={[Function]}
+    onYearChange={[Function]}
+    popperModifiers={
+        Object {
+            "flip": Object {
+              "enabled": false,
+            },
+            "offset": Object {
+              "enabled": true,
+              "offset": "0px, 0px",
+            },
+            "preventOverflow": Object {
+              "enabled": true,
+              "escapeWithReference": false,
+            },
+          }
+    }
+    popperPlacement="bottom-start"
+    preventOpenOnFocus={false}
+    readOnly={true}
+    selected={"2017-09-15T13:30:00.000Z"}
+    shouldCloseOnSelect={true}
+    showClearButton={false}
+    showIcon={true}
+    showInstruction={false}
+    showLabel={true}
+    showMonthDropdown={false}
+    showMonthYearDropdown={false}
+    showTimeSelect={false}
+    showYearDropdown={false}
+    timeCaption="Time"
+    timeIntervals={30}
+    withPortal={false}
+/>,
+  "nodes": Array [
+    <DatePicker
+      allowSameDay={false}
+      calender={true}
+      className="hig__text-field-v1__input"
+      closeOnSelect={true}
+      customInput={
+            <TextFieldPresenter
+                  disabled={true}
+                  focused={true}
+                  icon={
+                        <Icon
+                              nameOrSVG="calendar"
+                              size="24"
+                        />
+                  }
+                  id="text-field-36491"
+                  instructions={undefined}
+                  label={undefined}
+                  onBlur={null}
+                  onClearButtonClick={[Function]}
+                  onFocus={null}
+                  placeholder={undefined}
+                  readOnly={true}
+                  showClearButton={false}
+                  type="text"
+            />
+      }
+      dateFormat="L"
+      dateFormatCalendar="MMMM YYYY"
+      disabled={true}
+      disabledKeyboardNavigation={false}
+      dropdownMode="scroll"
+      fixedHeight={true}
+      focused={true}
+      id="hig__date-picker"
+      isClearable={false}
+      monthsShown={1}
+      onBlur={[Function]}
+      onChange={[Function]}
+      onClickOutside={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onMonthChange={[Function]}
+      onSelect={[Function]}
+      onYearChange={[Function]}
+      popperModifiers={
+            Object {
+                  "flip": Object {
+                    "enabled": false,
+                  },
+                  "offset": Object {
+                    "enabled": true,
+                    "offset": "0px, 0px",
+                  },
+                  "preventOverflow": Object {
+                    "enabled": true,
+                    "escapeWithReference": false,
+                  },
+                }
+      }
+      popperPlacement="bottom-start"
+      preventOpenOnFocus={false}
+      readOnly={true}
+      selected={"2017-09-15T13:30:00.000Z"}
+      shouldCloseOnSelect={true}
+      showClearButton={false}
+      showIcon={true}
+      showInstruction={false}
+      showLabel={true}
+      showMonthDropdown={false}
+      showMonthYearDropdown={false}
+      showTimeSelect={false}
+      showYearDropdown={false}
+      timeCaption="Time"
+      timeIntervals={30}
+      withPortal={false}
+/>,
+  ],
+  "options": Object {},
+  "renderer": ReactShallowRenderer {
+    "_context": Object {},
+    "_element": <DatePicker
+      closeOnSelect={true}
+      disabled={true}
+      fixedHeight={true}
+      focused={true}
+      selected={"2017-09-15T13:30:00.000Z"}
+      shouldCloseOnSelect={true}
+      showClearButton={false}
+      showIcon={true}
+      showInstruction={false}
+      showLabel={true}
+/>,
+    "_forcedUpdate": false,
+    "_instance": DatePicker {
+      "context": Object {},
+      "props": Object {
+        "closeOnSelect": true,
+        "disabled": true,
+        "fixedHeight": true,
+        "focused": true,
+        "selected": "2017-09-15T13:30:00.000Z",
+        "shouldCloseOnSelect": true,
+        "showClearButton": false,
+        "showIcon": true,
+        "showInstruction": false,
+        "showLabel": true,
+      },
+      "refs": Object {},
+      "state": null,
+      "updater": Updater {
+        "_callbacks": Array [],
+        "_renderer": [Circular],
+      },
+    },
+    "_newState": null,
+    "_rendered": <DatePicker
+      allowSameDay={false}
+      calender={true}
+      className="hig__text-field-v1__input"
+      closeOnSelect={true}
+      customInput={
+            <TextFieldPresenter
+                  disabled={true}
+                  focused={true}
+                  icon={
+                        <Icon
+                              nameOrSVG="calendar"
+                              size="24"
+                        />
+                  }
+                  id="text-field-36491"
+                  instructions={undefined}
+                  label={undefined}
+                  onBlur={null}
+                  onClearButtonClick={[Function]}
+                  onFocus={null}
+                  placeholder={undefined}
+                  readOnly={true}
+                  showClearButton={false}
+                  type="text"
+            />
+      }
+      dateFormat="L"
+      dateFormatCalendar="MMMM YYYY"
+      disabled={true}
+      disabledKeyboardNavigation={false}
+      dropdownMode="scroll"
+      fixedHeight={true}
+      focused={true}
+      id="hig__date-picker"
+      isClearable={false}
+      monthsShown={1}
+      onBlur={[Function]}
+      onChange={[Function]}
+      onClickOutside={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onMonthChange={[Function]}
+      onSelect={[Function]}
+      onYearChange={[Function]}
+      popperModifiers={
+            Object {
+                  "flip": Object {
+                    "enabled": false,
+                  },
+                  "offset": Object {
+                    "enabled": true,
+                    "offset": "0px, 0px",
+                  },
+                  "preventOverflow": Object {
+                    "enabled": true,
+                    "escapeWithReference": false,
+                  },
+                }
+      }
+      popperPlacement="bottom-start"
+      preventOpenOnFocus={false}
+      readOnly={true}
+      selected={"2017-09-15T13:30:00.000Z"}
+      shouldCloseOnSelect={true}
+      showClearButton={false}
+      showIcon={true}
+      showInstruction={false}
+      showLabel={true}
+      showMonthDropdown={false}
+      showMonthYearDropdown={false}
+      showTimeSelect={false}
+      showYearDropdown={false}
+      timeCaption="Time"
+      timeIntervals={30}
+      withPortal={false}
+/>,
+    "_rendering": false,
+    "_updater": Updater {
+      "_callbacks": Array [],
+      "_renderer": [Circular],
+    },
+    "getRenderOutput": [Function],
+    "render": [Function],
+  },
+  "root": [Circular],
+  "unrendered": <DatePicker
+    closeOnSelect={true}
+    disabled={true}
+    fixedHeight={true}
+    focused={true}
+    selected={"2017-09-15T13:30:00.000Z"}
+    shouldCloseOnSelect={true}
+    showClearButton={false}
+    showIcon={true}
+    showInstruction={false}
+    showLabel={true}
+/>,
+}
+`;
+
+exports[`DatePicker Snapshot tests regular view 1`] = `
+ShallowWrapper {
+  "complexSelector": ComplexSelector {
+    "buildPredicate": [Function],
+    "childrenOfNode": [Function],
+    "findWhereUnwrapped": [Function],
+  },
+  "length": 1,
+  "node": <DatePicker
+    allowSameDay={false}
+    calender={true}
+    className="hig__text-field-v1__input"
+    closeOnSelect={true}
+    customInput={
+        <TextFieldPresenter
+            disabled={true}
+            focused={true}
+            icon={
+                <Icon
+                    nameOrSVG="calendar"
+                    size="24"
+                />
+            }
+            id="text-field-36491"
+            instructions={undefined}
+            label={undefined}
+            onBlur={null}
+            onClearButtonClick={[Function]}
+            onFocus={null}
+            placeholder={undefined}
+            readOnly={true}
+            showClearButton={false}
+            type="text"
+        />
+    }
+    dateFormat="L"
+    dateFormatCalendar="MMMM YYYY"
+    disabled={false}
+    disabledKeyboardNavigation={false}
+    dropdownMode="scroll"
+    fixedHeight={true}
+    focused={true}
+    id="hig__date-picker"
+    isClearable={false}
+    monthsShown={1}
+    onBlur={[Function]}
+    onChange={[Function]}
+    onClickOutside={[Function]}
+    onFocus={[Function]}
+    onKeyDown={[Function]}
+    onMonthChange={[Function]}
+    onSelect={[Function]}
+    onYearChange={[Function]}
+    popperModifiers={
+        Object {
+            "flip": Object {
+              "enabled": false,
+            },
+            "offset": Object {
+              "enabled": true,
+              "offset": "0px, 0px",
+            },
+            "preventOverflow": Object {
+              "enabled": true,
+              "escapeWithReference": false,
+            },
+          }
+    }
+    popperPlacement="bottom-start"
+    preventOpenOnFocus={false}
+    readOnly={true}
+    selected={"2017-09-15T13:30:00.000Z"}
+    shouldCloseOnSelect={true}
+    showClearButton={false}
+    showIcon={true}
+    showInstruction={false}
+    showLabel={true}
+    showMonthDropdown={false}
+    showMonthYearDropdown={false}
+    showTimeSelect={false}
+    showYearDropdown={false}
+    timeCaption="Time"
+    timeIntervals={30}
+    withPortal={false}
+/>,
+  "nodes": Array [
+    <DatePicker
+      allowSameDay={false}
+      calender={true}
+      className="hig__text-field-v1__input"
+      closeOnSelect={true}
+      customInput={
+            <TextFieldPresenter
+                  disabled={true}
+                  focused={true}
+                  icon={
+                        <Icon
+                              nameOrSVG="calendar"
+                              size="24"
+                        />
+                  }
+                  id="text-field-36491"
+                  instructions={undefined}
+                  label={undefined}
+                  onBlur={null}
+                  onClearButtonClick={[Function]}
+                  onFocus={null}
+                  placeholder={undefined}
+                  readOnly={true}
+                  showClearButton={false}
+                  type="text"
+            />
+      }
+      dateFormat="L"
+      dateFormatCalendar="MMMM YYYY"
+      disabled={false}
+      disabledKeyboardNavigation={false}
+      dropdownMode="scroll"
+      fixedHeight={true}
+      focused={true}
+      id="hig__date-picker"
+      isClearable={false}
+      monthsShown={1}
+      onBlur={[Function]}
+      onChange={[Function]}
+      onClickOutside={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onMonthChange={[Function]}
+      onSelect={[Function]}
+      onYearChange={[Function]}
+      popperModifiers={
+            Object {
+                  "flip": Object {
+                    "enabled": false,
+                  },
+                  "offset": Object {
+                    "enabled": true,
+                    "offset": "0px, 0px",
+                  },
+                  "preventOverflow": Object {
+                    "enabled": true,
+                    "escapeWithReference": false,
+                  },
+                }
+      }
+      popperPlacement="bottom-start"
+      preventOpenOnFocus={false}
+      readOnly={true}
+      selected={"2017-09-15T13:30:00.000Z"}
+      shouldCloseOnSelect={true}
+      showClearButton={false}
+      showIcon={true}
+      showInstruction={false}
+      showLabel={true}
+      showMonthDropdown={false}
+      showMonthYearDropdown={false}
+      showTimeSelect={false}
+      showYearDropdown={false}
+      timeCaption="Time"
+      timeIntervals={30}
+      withPortal={false}
+/>,
+  ],
+  "options": Object {},
+  "renderer": ReactShallowRenderer {
+    "_context": Object {},
+    "_element": <DatePicker
+      closeOnSelect={true}
+      disabled={false}
+      fixedHeight={true}
+      focused={true}
+      selected={"2017-09-15T13:30:00.000Z"}
+      shouldCloseOnSelect={true}
+      showClearButton={false}
+      showIcon={true}
+      showInstruction={false}
+      showLabel={true}
+/>,
+    "_forcedUpdate": false,
+    "_instance": DatePicker {
+      "context": Object {},
+      "props": Object {
+        "closeOnSelect": true,
+        "disabled": false,
+        "fixedHeight": true,
+        "focused": true,
+        "selected": "2017-09-15T13:30:00.000Z",
+        "shouldCloseOnSelect": true,
+        "showClearButton": false,
+        "showIcon": true,
+        "showInstruction": false,
+        "showLabel": true,
+      },
+      "refs": Object {},
+      "state": null,
+      "updater": Updater {
+        "_callbacks": Array [],
+        "_renderer": [Circular],
+      },
+    },
+    "_newState": null,
+    "_rendered": <DatePicker
+      allowSameDay={false}
+      calender={true}
+      className="hig__text-field-v1__input"
+      closeOnSelect={true}
+      customInput={
+            <TextFieldPresenter
+                  disabled={true}
+                  focused={true}
+                  icon={
+                        <Icon
+                              nameOrSVG="calendar"
+                              size="24"
+                        />
+                  }
+                  id="text-field-36491"
+                  instructions={undefined}
+                  label={undefined}
+                  onBlur={null}
+                  onClearButtonClick={[Function]}
+                  onFocus={null}
+                  placeholder={undefined}
+                  readOnly={true}
+                  showClearButton={false}
+                  type="text"
+            />
+      }
+      dateFormat="L"
+      dateFormatCalendar="MMMM YYYY"
+      disabled={false}
+      disabledKeyboardNavigation={false}
+      dropdownMode="scroll"
+      fixedHeight={true}
+      focused={true}
+      id="hig__date-picker"
+      isClearable={false}
+      monthsShown={1}
+      onBlur={[Function]}
+      onChange={[Function]}
+      onClickOutside={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onMonthChange={[Function]}
+      onSelect={[Function]}
+      onYearChange={[Function]}
+      popperModifiers={
+            Object {
+                  "flip": Object {
+                    "enabled": false,
+                  },
+                  "offset": Object {
+                    "enabled": true,
+                    "offset": "0px, 0px",
+                  },
+                  "preventOverflow": Object {
+                    "enabled": true,
+                    "escapeWithReference": false,
+                  },
+                }
+      }
+      popperPlacement="bottom-start"
+      preventOpenOnFocus={false}
+      readOnly={true}
+      selected={"2017-09-15T13:30:00.000Z"}
+      shouldCloseOnSelect={true}
+      showClearButton={false}
+      showIcon={true}
+      showInstruction={false}
+      showLabel={true}
+      showMonthDropdown={false}
+      showMonthYearDropdown={false}
+      showTimeSelect={false}
+      showYearDropdown={false}
+      timeCaption="Time"
+      timeIntervals={30}
+      withPortal={false}
+/>,
+    "_rendering": false,
+    "_updater": Updater {
+      "_callbacks": Array [],
+      "_renderer": [Circular],
+    },
+    "getRenderOutput": [Function],
+    "render": [Function],
+  },
+  "root": [Circular],
+  "unrendered": <DatePicker
+    closeOnSelect={true}
+    disabled={false}
+    fixedHeight={true}
+    focused={true}
+    selected={"2017-09-15T13:30:00.000Z"}
+    shouldCloseOnSelect={true}
+    showClearButton={false}
+    showIcon={true}
+    showInstruction={false}
+    showLabel={true}
+/>,
+}
+`;
