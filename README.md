@@ -41,5 +41,5 @@ export default class Default extends Component {
 }
 ```
 ### More details on props 
-Please see this [link](/src/README.md)
+See https://github.com/ziweiwu/react-date-picker/blob/dev/src/README.md
 
