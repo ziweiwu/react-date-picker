@@ -1,10 +1,16 @@
 # react-hig-datepicker
 
-Build a simple date picker component with HIG element and style
-- based on react-datepicker https://github.com/Hacker0x01/react-datepicker/
+Build a simple date picker component with HIG element and style 
+- based on react-datepicker https://github.com/Hacker0x01/react-datepicker
+- based on HIG components library https://github.com/Autodesk/hig
 
 ## Demo
 demo link: https://ziweiwu.github.io/fusion-hig-prototyping
+
+## Install the package
+```
+yarn add react-hig-datepicker
+```
 
 ## Usage Example
 ```
@@ -27,10 +33,13 @@ export default class Default extends Component {
   render() {
     return (
       <DatePicker
-        selected={this.state.startDate}
         onChange={this.handleChangeDate}
+        selected={this.state.startDate}
       />
     );
   }
 }
 ```
+### More details on props 
+Please see this [link](/src/README.md)
+

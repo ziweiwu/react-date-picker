@@ -8,54 +8,48 @@ import ReactDatePicker from 'react-datepicker';
 export default class DatePicker extends React.Component {
   static propTypes = {
     adjustDateOnChange: PropTypes.bool,
+    closeOnSelect: PropTypes.bool,
+    dateFormat: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
     dateFormatCalendar: PropTypes.string,
     dayClassName: PropTypes.func,
     disabled: PropTypes.bool,
     endDate: PropTypes.object,
+    excludeDates: PropTypes.array,
+    filterDate: PropTypes.func,
+    fixedHeight: PropTypes.bool,
     focused: PropTypes.bool,
     highlightDates: PropTypes.array,
     id: PropTypes.string,
+    includeDates: PropTypes.array,
+    instruction: PropTypes.string,
+    label: PropTypes.string,
     locale: PropTypes.string,
     maxDate: PropTypes.object,
     minDate: PropTypes.object,
     onChange: PropTypes.func,
+    placeholder: PropTypes.string,
+    readOnly: PropTypes.bool,
     selected: PropTypes.object,
     selectsEnd: PropTypes.bool,
     selectsStart: PropTypes.bool,
+    showClearButton: PropTypes.bool,
+    showIcon: PropTypes.bool,
+    showInstruction: PropTypes.bool,
+    showLabel: PropTypes.bool,
     startDate: PropTypes.object,
     startOpen: PropTypes.bool,
     title: PropTypes.string,
-    todayButton: PropTypes.string,
-    shouldCloseOnSelect: PropTypes.bool,
-    readOnly: PropTypes.bool,
-    showIcon: PropTypes.bool,
-    instruction: PropTypes.string,
-    showInstruction: PropTypes.bool,
-    label: PropTypes.string,
-    showLabel: PropTypes.bool,
-    fixedHeight: PropTypes.bool,
-    placeholder: PropTypes.string,
-    showClearButton: PropTypes.bool,
-    excludeDates: PropTypes.array,
-    filterDate: PropTypes.func,
-    dateFormat: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-    includeDates: PropTypes.array,
-    closeOnSelect: PropTypes.bool
   };
 
   static defaultProps = {
-    focused: true,
-    shouldCloseOnSelect: true,
-    disabled: false,
-    showIcon: true,
-    label: undefined,
-    showLabel: true,
-    instruction: undefined,
-    showInstruction: false,
-    fixedHeight: true,
-    showClearButton: false,
-    today: true,
     closeOnSelect:true,
+    disabled: false,
+    fixedHeight: true,
+    focused: true,
+    showClearButton: false,
+    showIcon: true,
+    showInstruction: false,
+    showLabel: true,
   };
 
   render() {
@@ -64,36 +58,34 @@ export default class DatePicker extends React.Component {
     const showIcon = this.props.showIcon ? calenderIcon : undefined;
     return (<ReactDatePicker
       {...props}
+      calender
       className="hig__text-field-v1__input"
       id="hig__date-picker"
-      ref={node => this.node = node}
-      readOnly
-      calender
-      shouldCloseOnSelect={props.closeOnSelect}
-      showMonthYearDropdown={false}
-      showMonthDropdown={false}
-      showYearDropdown={false}
-      showTimeSelect={false}
-      withPortal={false}
       isClearable={false}
+      readOnly
+      ref={node => this.node = node}
+      shouldCloseOnSelect={props.closeOnSelect}
+      showMonthDropdown={false}
+      showMonthYearDropdown={false}
+      showTimeSelect={false}
+      showYearDropdown={false}
+      withPortal={false}
       // use hig text field as inputField
       // use ref to allow the use clear button in text field component
       customInput={
         <TextFieldPresenter
-          id={props.id}
-          focused={props.focused}
-          readOnly
           disabled
-          placeholder={props.placeholder}
+          focused={props.focused}
+          icon={showIcon}
+          id={props.id}
           instructions={props.showInstruction ? props.instruction : undefined}
           label={props.showLabel ? props.label : undefined}
-          icon={showIcon}
-          onFocus={null}
           onBlur={null}
+          onClearButtonClick={() => {this.node.clear();}}
+          onFocus={null}
+          placeholder={props.placeholder}
+          readOnly
           showClearButton={props.showClearButton}
-          onClearButtonClick={() => {
-            this.node.clear();
-          }}
         />}
 
       // calender popper settings

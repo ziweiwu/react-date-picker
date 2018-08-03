@@ -23,7 +23,7 @@ ShallowWrapper {
                     size="24"
                 />
             }
-            id="text-field-79657"
+            id="text-field-36491"
             instructions={undefined}
             label={undefined}
             onBlur={null}
@@ -44,9 +44,7 @@ ShallowWrapper {
     focused={true}
     hidePopper={false}
     id="hig__date-picker"
-    instruction={undefined}
     isClearable={false}
-    label={undefined}
     monthsShown={1}
     onBlur={[Function]}
     onChange={[Function]}
@@ -86,7 +84,6 @@ ShallowWrapper {
     showYearDropdown={false}
     timeCaption="Time"
     timeIntervals={30}
-    today={true}
     withPortal={false}
 />,
   "nodes": Array [
@@ -105,7 +102,7 @@ ShallowWrapper {
                               size="24"
                         />
                   }
-                  id="text-field-79657"
+                  id="text-field-36491"
                   instructions={undefined}
                   label={undefined}
                   onBlur={null}
@@ -126,9 +123,7 @@ ShallowWrapper {
       focused={true}
       hidePopper={false}
       id="hig__date-picker"
-      instruction={undefined}
       isClearable={false}
-      label={undefined}
       monthsShown={1}
       onBlur={[Function]}
       onChange={[Function]}
@@ -168,7 +163,6 @@ ShallowWrapper {
       showYearDropdown={false}
       timeCaption="Time"
       timeIntervals={30}
-      today={true}
       withPortal={false}
 />,
   ],
@@ -181,15 +175,12 @@ ShallowWrapper {
       fixedHeight={true}
       focused={true}
       hidePopper={false}
-      instruction={undefined}
-      label={undefined}
       selected={"2017-09-15T13:30:00.000Z"}
       shouldCloseOnSelect={true}
       showClearButton={false}
       showIcon={true}
       showInstruction={false}
       showLabel={true}
-      today={true}
 />,
     "_forcedUpdate": false,
     "_instance": DatePicker {
@@ -200,15 +191,12 @@ ShallowWrapper {
         "fixedHeight": true,
         "focused": true,
         "hidePopper": false,
-        "instruction": undefined,
-        "label": undefined,
         "selected": "2017-09-15T13:30:00.000Z",
         "shouldCloseOnSelect": true,
         "showClearButton": false,
         "showIcon": true,
         "showInstruction": false,
         "showLabel": true,
-        "today": true,
       },
       "refs": Object {},
       "state": null,
@@ -233,7 +221,7 @@ ShallowWrapper {
                               size="24"
                         />
                   }
-                  id="text-field-79657"
+                  id="text-field-36491"
                   instructions={undefined}
                   label={undefined}
                   onBlur={null}
@@ -254,9 +242,7 @@ ShallowWrapper {
       focused={true}
       hidePopper={false}
       id="hig__date-picker"
-      instruction={undefined}
       isClearable={false}
-      label={undefined}
       monthsShown={1}
       onBlur={[Function]}
       onChange={[Function]}
@@ -296,7 +282,6 @@ ShallowWrapper {
       showYearDropdown={false}
       timeCaption="Time"
       timeIntervals={30}
-      today={true}
       withPortal={false}
 />,
     "_rendering": false,
@@ -314,15 +299,12 @@ ShallowWrapper {
     fixedHeight={true}
     focused={true}
     hidePopper={false}
-    instruction={undefined}
-    label={undefined}
     selected={"2017-09-15T13:30:00.000Z"}
     shouldCloseOnSelect={true}
     showClearButton={false}
     showIcon={true}
     showInstruction={false}
     showLabel={true}
-    today={true}
 />,
 }
 `;
@@ -350,7 +332,7 @@ ShallowWrapper {
                     size="24"
                 />
             }
-            id="text-field-79657"
+            id="text-field-36491"
             instructions={undefined}
             label={undefined}
             onBlur={null}
@@ -370,9 +352,7 @@ ShallowWrapper {
     fixedHeight={true}
     focused={true}
     id="hig__date-picker"
-    instruction={undefined}
     isClearable={false}
-    label={undefined}
     monthsShown={1}
     onBlur={[Function]}
     onChange={[Function]}
@@ -412,7 +392,6 @@ ShallowWrapper {
     showYearDropdown={false}
     timeCaption="Time"
     timeIntervals={30}
-    today={true}
     withPortal={false}
 />,
   "nodes": Array [
@@ -431,7 +410,7 @@ ShallowWrapper {
                               size="24"
                         />
                   }
-                  id="text-field-79657"
+                  id="text-field-36491"
                   instructions={undefined}
                   label={undefined}
                   onBlur={null}
@@ -451,9 +430,7 @@ ShallowWrapper {
       fixedHeight={true}
       focused={true}
       id="hig__date-picker"
-      instruction={undefined}
       isClearable={false}
-      label={undefined}
       monthsShown={1}
       onBlur={[Function]}
       onChange={[Function]}
@@ -493,7 +470,6 @@ ShallowWrapper {
       showYearDropdown={false}
       timeCaption="Time"
       timeIntervals={30}
-      today={true}
       withPortal={false}
 />,
   ],
@@ -505,15 +481,12 @@ ShallowWrapper {
       disabled={true}
       fixedHeight={true}
       focused={true}
-      instruction={undefined}
-      label={undefined}
       selected={"2017-09-15T13:30:00.000Z"}
       shouldCloseOnSelect={true}
       showClearButton={false}
       showIcon={true}
       showInstruction={false}
       showLabel={true}
-      today={true}
 />,
     "_forcedUpdate": false,
     "_instance": DatePicker {
@@ -523,15 +496,12 @@ ShallowWrapper {
         "disabled": true,
         "fixedHeight": true,
         "focused": true,
-        "instruction": undefined,
-        "label": undefined,
         "selected": "2017-09-15T13:30:00.000Z",
         "shouldCloseOnSelect": true,
         "showClearButton": false,
         "showIcon": true,
         "showInstruction": false,
         "showLabel": true,
-        "today": true,
       },
       "refs": Object {},
       "state": null,
@@ -556,7 +526,7 @@ ShallowWrapper {
                               size="24"
                         />
                   }
-                  id="text-field-79657"
+                  id="text-field-36491"
                   instructions={undefined}
                   label={undefined}
                   onBlur={null}
@@ -576,9 +546,7 @@ ShallowWrapper {
       fixedHeight={true}
       focused={true}
       id="hig__date-picker"
-      instruction={undefined}
       isClearable={false}
-      label={undefined}
       monthsShown={1}
       onBlur={[Function]}
       onChange={[Function]}
@@ -618,7 +586,6 @@ ShallowWrapper {
       showYearDropdown={false}
       timeCaption="Time"
       timeIntervals={30}
-      today={true}
       withPortal={false}
 />,
     "_rendering": false,
@@ -635,15 +602,12 @@ ShallowWrapper {
     disabled={true}
     fixedHeight={true}
     focused={true}
-    instruction={undefined}
-    label={undefined}
     selected={"2017-09-15T13:30:00.000Z"}
     shouldCloseOnSelect={true}
     showClearButton={false}
     showIcon={true}
     showInstruction={false}
     showLabel={true}
-    today={true}
 />,
 }
 `;
@@ -671,7 +635,7 @@ ShallowWrapper {
                     size="24"
                 />
             }
-            id="text-field-79657"
+            id="text-field-36491"
             instructions={undefined}
             label={undefined}
             onBlur={null}
@@ -691,9 +655,7 @@ ShallowWrapper {
     fixedHeight={true}
     focused={true}
     id="hig__date-picker"
-    instruction={undefined}
     isClearable={false}
-    label={undefined}
     monthsShown={1}
     onBlur={[Function]}
     onChange={[Function]}
@@ -733,7 +695,6 @@ ShallowWrapper {
     showYearDropdown={false}
     timeCaption="Time"
     timeIntervals={30}
-    today={true}
     withPortal={false}
 />,
   "nodes": Array [
@@ -752,7 +713,7 @@ ShallowWrapper {
                               size="24"
                         />
                   }
-                  id="text-field-79657"
+                  id="text-field-36491"
                   instructions={undefined}
                   label={undefined}
                   onBlur={null}
@@ -772,9 +733,7 @@ ShallowWrapper {
       fixedHeight={true}
       focused={true}
       id="hig__date-picker"
-      instruction={undefined}
       isClearable={false}
-      label={undefined}
       monthsShown={1}
       onBlur={[Function]}
       onChange={[Function]}
@@ -814,7 +773,6 @@ ShallowWrapper {
       showYearDropdown={false}
       timeCaption="Time"
       timeIntervals={30}
-      today={true}
       withPortal={false}
 />,
   ],
@@ -826,15 +784,12 @@ ShallowWrapper {
       disabled={false}
       fixedHeight={true}
       focused={true}
-      instruction={undefined}
-      label={undefined}
       selected={"2017-09-15T13:30:00.000Z"}
       shouldCloseOnSelect={true}
       showClearButton={false}
       showIcon={true}
       showInstruction={false}
       showLabel={true}
-      today={true}
 />,
     "_forcedUpdate": false,
     "_instance": DatePicker {
@@ -844,15 +799,12 @@ ShallowWrapper {
         "disabled": false,
         "fixedHeight": true,
         "focused": true,
-        "instruction": undefined,
-        "label": undefined,
         "selected": "2017-09-15T13:30:00.000Z",
         "shouldCloseOnSelect": true,
         "showClearButton": false,
         "showIcon": true,
         "showInstruction": false,
         "showLabel": true,
-        "today": true,
       },
       "refs": Object {},
       "state": null,
@@ -877,7 +829,7 @@ ShallowWrapper {
                               size="24"
                         />
                   }
-                  id="text-field-79657"
+                  id="text-field-36491"
                   instructions={undefined}
                   label={undefined}
                   onBlur={null}
@@ -897,9 +849,7 @@ ShallowWrapper {
       fixedHeight={true}
       focused={true}
       id="hig__date-picker"
-      instruction={undefined}
       isClearable={false}
-      label={undefined}
       monthsShown={1}
       onBlur={[Function]}
       onChange={[Function]}
@@ -939,7 +889,6 @@ ShallowWrapper {
       showYearDropdown={false}
       timeCaption="Time"
       timeIntervals={30}
-      today={true}
       withPortal={false}
 />,
     "_rendering": false,
@@ -956,15 +905,12 @@ ShallowWrapper {
     disabled={false}
     fixedHeight={true}
     focused={true}
-    instruction={undefined}
-    label={undefined}
     selected={"2017-09-15T13:30:00.000Z"}
     shouldCloseOnSelect={true}
     showClearButton={false}
     showIcon={true}
     showInstruction={false}
     showLabel={true}
-    today={true}
 />,
 }
 `;
