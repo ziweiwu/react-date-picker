@@ -142,17 +142,22 @@ button.react-datepicker__navigation {
   -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
 }
 
+// change cursor of input field to default style
+input {
+  cursor: default !important;
+}
+
 //set the hover color of close button icons
 .hig__text-field-v1__clear {
   svg:hover {
     polygon {
       fill: #28d2be;
     }
-    path {
-      fill: #28d2be;
-    }
     circle{
       stroke: #28d2be;
+    }
+    path {
+      fill: #28d2be;
     }
   }
 }

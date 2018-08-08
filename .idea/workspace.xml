@@ -3,11 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a3c5068a-3616-4da5-8226-858c7a9551ff" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DatePicker.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/DatePicker.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/src/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/datePicker.css" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/datePicker.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/datePicker.scss" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -27,11 +23,11 @@
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
-      <file leaf-file-name="datePicker.scss" pinned="false" current-in-tab="false">
+      <file leaf-file-name="datePicker.scss" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/datePicker.scss">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="150" column="9" selection-start-line="150" selection-start-column="9" selection-end-line="150" selection-end-column="9" />
+            <state relative-caret-position="378">
+              <caret line="171" lean-forward="true" selection-start-line="171" selection-end-line="171" />
               <folding>
                 <element signature="e#3019#3286#2" expanded="true" />
                 <element signature="e#3326#3608#2" expanded="true" />
@@ -45,8 +41,8 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/demo/src/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="6" column="21" selection-start-line="6" selection-start-column="21" selection-end-line="6" selection-end-column="21" />
+            <state relative-caret-position="210">
+              <caret line="27" selection-start-line="27" selection-end-line="27" />
             </state>
           </provider>
         </entry>
@@ -54,17 +50,17 @@
       <file leaf-file-name="DatePicker.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DatePicker.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
+            <state relative-caret-position="2163">
               <caret line="103" column="11" selection-start-line="103" selection-start-column="11" selection-end-line="103" selection-end-column="11" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="package.json" pinned="false" current-in-tab="true">
+      <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/package.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="378">
-              <caret line="56" column="25" selection-start-line="56" selection-start-column="25" selection-end-line="56" selection-end-column="25" />
+            <state relative-caret-position="168">
+              <caret line="8" column="8" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -97,8 +93,8 @@
         <option value="$PROJECT_DIR$/src/DatePicker.js" />
         <option value="$PROJECT_DIR$/src/datePicker.css" />
         <option value="$PROJECT_DIR$/demo/src/index.js" />
-        <option value="$PROJECT_DIR$/src/datePicker.scss" />
         <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/src/datePicker.scss" />
       </list>
     </option>
   </component>
@@ -174,7 +170,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="SearchEverywhereHistoryKey" value="scss&#9;FILE&#9;file:///Users/t_wuz/ziwei/devs/react-hig-datepicker/react-hig-datepicker/src/datePicker.scss&#10;packa&#9;FILE&#9;file:///Users/t_wuz/ziwei/devs/react-hig-datepicker/react-hig-datepicker/package.json" />
+    <property name="SearchEverywhereHistoryKey" value="index.js&#9;FILE&#9;file:///Users/t_wuz/ziwei/devs/react-hig-datepicker/react-hig-datepicker/demo/src/index.js&#10;scss&#9;FILE&#9;file:///Users/t_wuz/ziwei/devs/react-hig-datepicker/react-hig-datepicker/src/datePicker.scss&#10;packa&#9;FILE&#9;file:///Users/t_wuz/ziwei/devs/react-hig-datepicker/react-hig-datepicker/package.json" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
@@ -208,7 +204,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="npm.start">
     <configuration name="build-css" type="js.build_tools.npm" factoryName="npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
@@ -252,27 +248,35 @@
       <workItem from="1533303872042" duration="8514000" />
       <workItem from="1533323892804" duration="70000" />
       <workItem from="1533329316954" duration="5000" />
-      <workItem from="1533759944096" duration="1121000" />
+      <workItem from="1533759944096" duration="1419000" />
+      <workItem from="1533762109757" duration="14000" />
     </task>
+    <task id="LOCAL-00001" summary="fixed: styled update">
+      <created>1533761119982</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1533761119982</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19484000" />
+    <option name="totallyTimeSpent" value="19796000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="524" y="23" width="1156" height="974" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49942988" visible="true" weight="0.23788546" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49828961" visible="true" weight="0.23788546" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3295325" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3295325" />
+      <window_info id="npm" order="2" sideWeight="0.50171036" side_tool="true" visible="true" weight="0.23788546" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.2292769" />
-      <window_info id="npm" order="2" sideWeight="0.5005701" side_tool="true" visible="true" weight="0.23788546" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.38654503" />
+      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.38654503" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -281,6 +285,7 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -294,7 +299,50 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="fixed: styled update" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed: styled update" />
+  </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/nwb.config.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/datePicker.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3150">
+          <caret line="150" column="9" selection-start-line="150" selection-start-column="9" selection-end-line="150" selection-end-column="9" />
+          <folding>
+            <element signature="e#3019#3286#2" expanded="true" />
+            <element signature="e#3326#3608#2" expanded="true" />
+            <element signature="e#3677#3945#2" expanded="true" />
+            <element signature="e#3985#4268#2" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DatePicker.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2163">
+          <caret line="103" column="11" selection-start-line="103" selection-start-column="11" selection-end-line="103" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="8" column="8" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/src/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="567">
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/nwb.config.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -388,48 +436,36 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DatePicker.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
+        <state relative-caret-position="2163">
           <caret line="103" column="11" selection-start-line="103" selection-start-column="11" selection-end-line="103" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/datePicker.css">
+    <entry file="file://$PROJECT_DIR$/src/datePicker.css" />
+    <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="481">
-          <caret line="119" selection-start-line="119" selection-end-line="119" />
-          <folding>
-            <element signature="e#1796#2063#2" expanded="true" />
-            <element signature="e#2141#2423#2" expanded="true" />
-            <element signature="e#2512#2780#2" expanded="true" />
-            <element signature="e#2854#3137#2" expanded="true" />
-          </folding>
+        <state relative-caret-position="168">
+          <caret line="8" column="8" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/demo/src/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="6" column="21" selection-start-line="6" selection-start-column="21" selection-end-line="6" selection-end-column="21" />
+        <state relative-caret-position="210">
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/datePicker.scss">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="150" column="9" selection-start-line="150" selection-start-column="9" selection-end-line="150" selection-end-column="9" />
+        <state relative-caret-position="378">
+          <caret line="171" lean-forward="true" selection-start-line="171" selection-end-line="171" />
           <folding>
             <element signature="e#3019#3286#2" expanded="true" />
             <element signature="e#3326#3608#2" expanded="true" />
             <element signature="e#3677#3945#2" expanded="true" />
             <element signature="e#3985#4268#2" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="56" column="25" selection-start-line="56" selection-start-column="25" selection-end-line="56" selection-end-column="25" />
         </state>
       </provider>
     </entry>
