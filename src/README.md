@@ -3,7 +3,7 @@
 Date picker allows user to easily input a date or a date range
 
 | property  | propType   | required  | default  |  description  |
-|---|---|---|---|---|
+|-----------|------------|-----------|----------|---------------|
 | closeOnSelect | bool  |   | True  | Close the calender popper after a date is selected  |
 | dateFormat    | string   |    | "MM/DD/YYYY"  | Set the date format display in the input field   |
 | disable   | bool     |   | False  | Disable date picker    |

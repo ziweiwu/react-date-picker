@@ -18,7 +18,7 @@
     "test:coverage": "nwb test-react --coverage",
     "test:watch": "nwb test-react --server",
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
-    "watch-css": "yarn build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive"
+    "watch-css": "yarn build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
   },
   "dependencies": {
     "@hig/icon": "^0.1.3",
