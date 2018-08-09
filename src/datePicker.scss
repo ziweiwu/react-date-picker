@@ -147,8 +147,10 @@ input {
   cursor: default !important;
 }
 
-//set the hover color of close button icons
 .hig__text-field-v1__clear {
+  height:30px;
+  width:30px;
+  //set the hover color of close button icons
   svg:hover {
     polygon {
       fill: #28d2be;
@@ -168,6 +170,10 @@ button.hig__icon-button {
   border: none;
   padding: 0;
   cursor: pointer;
+  // remove button focus outline
+  &:focus {
+    outline: 0;
+  }
 }
 
 // Overrides the stylesheet for react-datepicker library below

@@ -1,6 +1,6 @@
 {
   "name": "react-hig-datepicker",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "react-hig-datepicker React component",
   "main": "lib/index.js",
   "module": "es/index.js",
