@@ -38,11 +38,11 @@ $datepicker__navigation-disabled-color: lighten($datepicker__muted-color, 20%);
 }
 
 .react-datepicker__day {
-  width: 2.5em;
   border-radius: 0 !important;
   margin: 0 !important;
   width: 30px !important;
   height: 30px !important;
+  line-height: 30px !important;
 
   // today's date in hig blue color and bold when not hovered or selected
   &--today:not(&--selected):not(:hover):not(&--disabled):not(&--in-range):not(&--in-selecting-range):not(&--keyboard-selected) {
