@@ -1,8 +1,8 @@
 @import "~@hig/styles/build/index.css";
-@import "~@hig/styles/mixins/colors";
-@import "~@hig/styles/mixins/shadows";
-@import "~@hig/styles/mixins/typography";
-@import "~@hig/styles/tokens/layers";
+@import "~@hig/styles/mixins/colors.scss";
+@import "~@hig/styles/mixins/shadows.scss";
+@import "~@hig/styles/mixins/typography.scss";
+@import "~@hig/styles/tokens/layers.scss";
 
 $datepicker__border-radius: 0.2rem;
 $datepicker__day-margin: 0.166rem;
@@ -26,16 +26,10 @@ $datepicker__navigation-disabled-color: lighten($datepicker__muted-color, 20%);
 // disable selection highlighting for calender
 // https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting
 .react-datepicker {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   line-height: 16px;
   box-shadow: 0 0 4px color(hig-cool-gray-30);
+  border-radius: 2px;
 }
 
 // hide the days from prev and next month in current month
@@ -44,10 +38,11 @@ $datepicker__navigation-disabled-color: lighten($datepicker__muted-color, 20%);
 }
 
 .react-datepicker__day {
-  width: 2.5em;
   border-radius: 0 !important;
-  margin: 0 !important; width: 30px !important;
+  margin: 0 !important;
+  width: 30px !important;
   height: 30px !important;
+  line-height: 30px !important;
 
   // today's date in hig blue color and bold when not hovered or selected
   &--today:not(&--selected):not(:hover):not(&--disabled):not(&--in-range):not(&--in-selecting-range):not(&--keyboard-selected) {
@@ -80,16 +75,6 @@ $datepicker__navigation-disabled-color: lighten($datepicker__muted-color, 20%);
   color: #222934 !important;
 }
 
-//set the hover cover of close button icons
-svg:hover {
-  polygon {
-    fill: #28d2be;
-  }
-  circle {
-    stroke: #28d2be;
-  }
-}
-
 //day name
 .react-datepicker__day-names {
   opacity: 0.5;
@@ -108,7 +93,6 @@ svg:hover {
 // used svg uri converter to convert svg to background images
 button.react-datepicker__navigation {
   text-align: center;
-  cursor: pointer;
   position: absolute;
   top: 15px;
   width: 15px;
@@ -151,31 +135,47 @@ button.react-datepicker__navigation {
 /* Hig TextField Style */
 .hig__text-field-v1 {
   min-width: 230px;
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer */
+  -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */
+  -webkit-user-select: none; /* Chrome, Safari, and Opera */
+  -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
 }
 
-.hig__text-field-v1__input-wrapper {
-  &:hover {
-    border-color: #28d2be;
-    box-shadow: 0 1px 0 #28d2be;
+// change cursor of input field to default style
+input {
+  cursor: default !important;
+}
+
+.hig__text-field-v1__clear {
+  height:30px;
+  width:30px;
+  //set the hover color of close button icons
+  svg:hover {
+    polygon {
+      fill: #28d2be;
+    }
+    circle{
+      stroke: #28d2be;
+    }
+    path {
+      fill: #28d2be;
+    }
   }
 }
 
-// hover color for calender icon
-//.hig__text-field-v1__icon:hover {
-//  path {
-//     fill: #28d2be;
-//  }
-//}
-
-.hig__text-field-v1__label {
-  font-size: 14px;
-}
-
+// set style for close button
 button.hig__icon-button {
   background-color: transparent;
   border: none;
-  padding-top: 5px;
+  padding: 0;
+  cursor: pointer;
+  // remove button focus outline
+  &:focus {
+    outline: 0;
+  }
 }
 
 // Overrides the stylesheet for react-datepicker library below
-@import 'react-datepicker/src/stylesheets/datepicker';
+@import '~react-datepicker/src/stylesheets/datepicker';
+

@@ -1,7 +1,7 @@
-import React, {Component} from 'react'
-import {render} from 'react-dom'
-import Datepicker from '../../src'
-import '../../src/datePicker.css'
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import Datepicker from '../../src';
+import '../../src/datePicker.scss';
 
 class Demo extends Component {
   constructor(props) {
@@ -14,18 +14,26 @@ class Demo extends Component {
 
   handleChangeDate(date) {
     this.setState({
-      startDate: date
-    }); }
+      startDate: date,
+    });
+  }
 
   render() {
-    return <div>
-      <h1>react-hig-datepicker Demo</h1>
-      <Datepicker
-        selected={this.state.startDate}
-        onChange={this.handleChangeDate}
-      />
-    </div>
+    return (
+      <div>
+        <h1>
+react-hig-datepicker Demo
+        </h1>
+        <Datepicker
+          selected={this.state.startDate}
+          onChange={this.handleChangeDate}
+          showClearButton
+          label="Select a date"
+          instruction="Choose a date"
+        />
+      </div>
+    );
   }
 }
 
-render(<Demo/>, document.querySelector('#demo'))
+render(<Demo />, document.querySelector('#demo'));
