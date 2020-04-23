@@ -1,6 +1,6 @@
 # react-hig-datepicker
 
-Build a simple date picker component with HIG element and style 
+This is a simple date picker component with HIG element and style 
 - based on react-datepicker https://github.com/Hacker0x01/react-datepicker
 - based on HIG components library https://github.com/Autodesk/hig
 
