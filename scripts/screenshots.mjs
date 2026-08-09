@@ -31,7 +31,7 @@ const server = spawn(
   [
     "vite",
     "--config",
-    "vite.demo.config.ts",
+    "vite.demo.config.mts",
     "--host",
     "127.0.0.1",
     "--port",

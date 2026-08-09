@@ -26,6 +26,12 @@ updates:
           - minor
           - patch
     ignore:
+      # eslint 10 is blocked by the plugin ecosystem, not by this repo:
+      # eslint-plugin-jsx-a11y and eslint-plugin-react both still cap their
+      # peer range at eslint 9 in their latest releases. Revisit when they
+      # ship eslint 10 support; until then the PR can only ever fail.
+      - dependency-name: eslint
+        update-types: [version-update:semver-major]
       # react/react-dom are devDependencies here only so the tests can run.
       # The supported range is declared in peerDependencies, and widening it
       # is a deliberate decision - see AGENTS.md on why React 18 is the floor.

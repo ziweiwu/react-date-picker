@@ -24,7 +24,6 @@ export default defineConfig({
       external: (id) => !id.startsWith(".") && !id.startsWith("/"),
       output: {
         exports: "named",
-        interop: "auto",
       },
     },
   },
