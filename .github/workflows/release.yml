@@ -18,7 +18,9 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    environment: npm-publish
+    # No `environment:` on purpose - npm's trusted-publisher config has an
+    # optional environment field that would have to match exactly. Add one here
+    # (and there) later if you want publishes to require manual approval.
     permissions:
       contents: read
       # Required both for npm trusted publishing (OIDC) and for --provenance.
