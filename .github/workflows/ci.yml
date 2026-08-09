@@ -90,6 +90,79 @@ jobs:
       - run: npm ci
 
       # Run before regenerating anything, while the tree still matches the commit.
+      - name: Flag appearance changes that skipped the screenshots
+        run: |
+          BASE="${{ github.event.pull_request.base.sha || github.event.before }}"
+          if [ -z "$BASE" ] || [ "$BASE" = "0000000000000000000000000000000000000000" ] \
+             || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
+            echo "No usable base commit to diff against; skipping."
+            exit 0
+          fi
+
+          # Compare the *compiled* CSS, not the SCSS sources. Reformatting the
+          # stylesheet changes the source without changing a single rendered
+          # pixel, and flagging that produces false positives that get the
+          # whole check ignored.
+          HEAD_FP="$(node scripts/style-fingerprint.mjs src/styles)"
+
+          rm -rf /tmp/base-styles && mkdir -p /tmp/base-styles
+          if ! git archive "$BASE" src/styles 2>/dev/null | tar -x -C /tmp/base-styles 2>/dev/null; then
+            echo "Base commit has no src/styles; skipping."
+            exit 0
+          fi
+          BASE_FP="$(node scripts/style-fingerprint.mjs /tmp/base-styles/src/styles)"
+
+          echo "compiled CSS  base=${BASE_FP:0:16}  head=${HEAD_FP:0:16}"
+
+          if [ "$HEAD_FP" = "$BASE_FP" ]; then
+            echo "Compiled CSS is unchanged; the screenshots cannot be stale."
+            exit 0
+          fi
+          if git diff --name-only "$BASE" HEAD | grep -q '^docs/images/'; then
+            echo "Appearance changed and the images were regenerated."
+            exit 0
+          fi
+          if git log --format=%B "$BASE"..HEAD | grep -qF '[skip-images]'; then
+            echo "Opted out via [skip-images]."
+            exit 0
+          fi
+
+          echo "::error::The compiled stylesheet changed but docs/images did not," \
+               "so the README screenshots may now misrepresent the component." \
+               "Run 'npm run screenshots' (and 'npm run demo:gif' if the animation" \
+               "is affected) and commit the result, or add [skip-images] to the" \
+               "commit message."
+          exit 1
+
+      - run: npx playwright install --with-deps chromium
+      - name: Browser and accessibility tests
+        run: npm run test:e2e
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  # Keeps the README images honest. Deliberately does NOT diff the committed
+  # PNGs against freshly captured ones: font rasterisation differs between
+  # macOS (where they are generated) and Linux, so a byte comparison would fail
+  # on every run regardless of whether anything actually changed.
+  docs-images:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22.x
+          cache: npm
+
+      - run: npm ci
+
+      # Run before regenerating anything, while the tree still matches the commit.
       - name: Flag stylesheet changes that skipped the screenshots
         run: |
           BASE="${{ github.event.pull_request.base.sha || github.event.before }}"
