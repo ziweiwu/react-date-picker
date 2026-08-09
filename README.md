@@ -43,3 +43,9 @@ export default class Default extends Component {
 ### More details on props 
 See https://github.com/ziweiwu/react-date-picker/blob/master/README.md
 
+## Sponsor
+
+This component is in low-maintenance mode — it works, but it is not under
+active development. If it is load-bearing for you and you would like that to
+change, [sponsorship](https://github.com/sponsors/ziweiwu) is the signal that
+gets it back on the list.
