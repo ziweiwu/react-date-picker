@@ -20,13 +20,14 @@ npm run lint       # ESLint incl. jsx-a11y
 npm run typecheck  # compiles src/index.d.ts against types-test.ts
 npm run build      # -> es/ (ESM), lib/ (CJS), css/datePicker.css
 npm run audit      # runtime deps only; must be 0 before any release
+npm run check:package  # asserts the tarball npm would publish is usable
 ```
 
 ## Invariants
 
-Breaking any of these reintroduces a bug that was already shipped once. 1-6 are
-covered by tests; if you change the behaviour deliberately, change the test in
-the same commit rather than deleting it.
+Breaking any of these reintroduces a bug that was already shipped once. All are
+covered by an automated check; if you change the behaviour deliberately, change
+the check in the same commit rather than deleting it.
 
 1. **The input is `readOnly`, never `disabled`** (unless the caller passes
    `disabled`). 0.1.x hardcoded `disabled`, which made the picker unreachable by
@@ -54,10 +55,11 @@ the same commit rather than deleting it.
 
 7. **The published tarball ships no test files** and contains compiled CSS.
    0.1.8 shipped raw `.scss` plus tests and *no* CSS, so the
-   `lib/datePicker.css` the README documented 404'd for two years. This one has
-   **no automated check** — it rests on the negation patterns in the
-   `files` field. Run `npm pack --dry-run` and read the list before releasing,
-   and confirm `css/datePicker.css` is present.
+   `lib/datePicker.css` the README documented 404'd for two years.
+   `npm run check:package` enforces this — it inspects the real
+   `npm pack` output for required files, forbidden patterns (tests, snapshots,
+   `.npmrc`, `.env`) and a non-empty stylesheet. It runs in CI and in
+   `prepublishOnly`. Add a rule there whenever a new file type starts shipping.
 
 ## Traps
 
@@ -105,6 +107,11 @@ in real Chromium. A green unit run is not evidence that contrast is fine.
 
 - `npm run audit` (runtime deps) must report 0. CI enforces this on every push;
   dev-dependency findings are worth fixing but do not reach consumers.
+- Dependabot (`.github/dependabot.yml`) runs weekly over npm and GitHub Actions.
+  Runtime deps get individual PRs; dev tooling is grouped to cut noise. React
+  majors are deliberately ignored — widening the supported range is a decision,
+  not a bot PR. Read the grouped dev PRs rather than merging on green: a major
+  bump can quietly change test semantics.
 - CI also installs the packed tarball against each supported React major. That
   job is what catches "the peer range is a lie" — trust it over reasoning.
 - When bumping `react-datepicker`, re-read its changelog for prop renames and

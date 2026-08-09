@@ -39,6 +39,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Check package contents
+        run: npm run check:package
+
   e2e:
     runs-on: ubuntu-latest
     steps:

@@ -1,0 +1,58 @@
+version: 2
+
+updates:
+  # Runtime dependencies are few (three) and each one is load-bearing, so they
+  # get their own PRs rather than being batched into a noisy group.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: America/New_York
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+    commit-message:
+      prefix: "deps"
+      prefix-development: "deps-dev"
+    groups:
+      # Dev tooling churns constantly and is not shipped to consumers, so patch
+      # and minor bumps land as a single PR. Majors stay separate - they tend
+      # to need config changes (the vitest 3 -> 4 bump did).
+      dev-tooling:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+    ignore:
+      # react/react-dom are devDependencies here only so the tests can run.
+      # The supported range is declared in peerDependencies, and widening it
+      # is a deliberate decision - see AGENTS.md on why React 18 is the floor.
+      # A new React major should be adopted intentionally, not by bot PR.
+      - dependency-name: react
+        update-types: [version-update:semver-major]
+      - dependency-name: react-dom
+        update-types: [version-update:semver-major]
+      - dependency-name: "@types/react"
+        update-types: [version-update:semver-major]
+      - dependency-name: "@types/react-dom"
+        update-types: [version-update:semver-major]
+
+  # Pinned action versions go stale silently and are a supply-chain surface.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: America/New_York
+    labels:
+      - dependencies
+      - github-actions
+    commit-message:
+      prefix: "ci"
+    groups:
+      actions:
+        patterns:
+          - "*"
