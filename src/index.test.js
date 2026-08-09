@@ -1,14 +1,9 @@
-import * as index from './index';
+import { describe, expect, it } from "vitest";
+import * as index from "./index.js";
 
-describe('text-field/index', () => {
-  [
-    {
-      name: 'default',
-      value: expect.any(Function),
-    },
-  ].forEach(({ name, value }) => {
-    it(`exports ${name}`, () => {
-      expect(index).toHaveProperty(name, value);
-    });
+describe("public entry point", () => {
+  it("exposes the component as both the default and a named export", () => {
+    expect(index.default).toEqual(expect.any(Object));
+    expect(index.DatePicker).toBe(index.default);
   });
 });

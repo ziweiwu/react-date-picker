@@ -211,8 +211,17 @@ yarn-error.log*
 
 # build files
 /lib/
-/demo/dist/
 /es/
+/css/
+/demo/dist/
+
+# packed tarballs
+*.tgz
+
+# playwright
+/test-results/
+/playwright-report/
+/blob-report/
 
 # webstorm
 /.idea

@@ -1,0 +1,32 @@
+// HIG-derived design tokens.
+//
+// Several colours are deliberately darker than the original 0.x palette: the
+// values they replace failed WCAG 2.1 contrast minimums (see README
+// "Accessibility fixes"). Hue is preserved so the component still reads as
+// HIG; only luminance changed.
+
+// Brand
+$hig-blue: #0696d7; // original brand blue, retained for large/decorative use
+$hig-blue-accessible: #05719e; // 5.44:1 on white - selected day, "today"
+$hig-blue-hover: #0578ab; // 4.91:1 with white text - day hover
+$hig-teal: #17a294; // 3.17:1 on white - meets non-text contrast
+
+// Neutrals
+$hig-text: #222934;
+$hig-muted: #6b7280; // 4.83:1 on white (was #999, 2.85:1)
+$hig-label: #5b6572; // 5.92:1 on white (was rgba(0,0,0,.5), 3.95:1)
+$hig-instructions: #485366; // 7.76:1 on white
+$hig-border: #bec8d2;
+$hig-border-subtle: #d4dbe1;
+$hig-error: #c0392b;
+$hig-white: #ffffff;
+
+// Metrics
+$hig-font-family: ArtifaktElement, "Helvetica Neue", helvetica, arial, sans-serif;
+$hig-day-size: 30px;
+$hig-focus-ring: 2px solid $hig-blue-accessible;
+
+// The floated label's line box. 0.x reserved calc(12px + 3px) = 15px for an
+// 18px-tall label, so the label overhung the input by 3px. Reserving the full
+// height keeps the focus ring clear of the label text.
+$hig-label-height: 18px;

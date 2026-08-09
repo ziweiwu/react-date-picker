@@ -1,1 +1,1 @@
-export { default } from './DatePicker';
+export { default, default as DatePicker } from "./DatePicker.jsx";

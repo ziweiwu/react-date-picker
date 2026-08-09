@@ -1,0 +1,270 @@
+@use "tokens" as *;
+
+// Vendored from @hig/text-field@1.0.2 (build/index.css) and @hig/icon-button.
+//
+// The upstream packages are deprecated and peer-locked to react <= 16, so the
+// styles live here instead. Class names are unchanged so consumer overrides
+// written against 0.x keep working. Accessibility corrections are marked.
+
+// Screen-reader-only text (used for the clear button's accessible name).
+.hig__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.hig__text-field-v1 {
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+  min-width: 230px;
+  max-width: 450px;
+  font-family: $hig-font-family;
+  font-weight: 500;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: inherit;
+  }
+}
+
+.hig__text-field-v1__content {
+  width: 100%;
+}
+
+.hig__text-field-v1__content--with-icon {
+  margin-left: 26px;
+}
+
+.hig__text-field-v1__input-row {
+  display: flex;
+  align-items: center;
+}
+
+.hig__text-field-v1__icon {
+  position: absolute;
+  left: -28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  color: $hig-text;
+}
+
+.hig__text-field-v1__icon--disabled {
+  opacity: 0.3;
+}
+
+.hig__text-field-v1__label-spacer {
+  height: $hig-label-height;
+}
+
+.hig__text-field-v1__label {
+  position: absolute;
+  top: $hig-label-height;
+  // FIX: was rgba(0, 0, 0, 0.5) => 3.95:1, below the 4.5:1 AA minimum.
+  color: $hig-label;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  transition-property: top, font-size, line-height;
+  transition-duration: 0.1s;
+  transition-delay: 0.1s;
+
+  // FIX: honour users who have asked the OS to reduce motion.
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.hig__text-field-v1__label--input-focused,
+.hig__text-field-v1__label--with-value {
+  top: 0;
+  color: $hig-blue-accessible;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.hig__text-field-v1__label--required::after {
+  content: "*";
+  display: inline-block;
+  margin-left: 5px;
+}
+
+.hig__text-field-v1--disabled .hig__text-field-v1__label {
+  color: $hig-muted;
+  pointer-events: none;
+}
+
+.hig__text-field-v1__input-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  border-bottom: 1px solid $hig-border;
+
+  &:hover {
+    border-color: $hig-teal;
+  }
+}
+
+.hig__text-field-v1__input-wrapper--focused,
+.hig__text-field-v1__input-wrapper--focused:hover {
+  border-bottom: 2px solid $hig-blue-accessible;
+  // Keep the field from shifting 1px when the border thickens.
+  margin-bottom: 9px;
+}
+
+.hig__text-field-v1__input-wrapper--disabled,
+.hig__text-field-v1__input-wrapper--disabled:hover {
+  border-bottom: 1px dashed $hig-border-subtle;
+  color: $hig-muted;
+}
+
+.hig__text-field-v1__input-wrapper--with-errors,
+.hig__text-field-v1__input-wrapper--with-errors:hover {
+  border-bottom: 1px solid $hig-error;
+}
+
+.hig__text-field-v1__input {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 3px 0;
+  border: none;
+  background-color: transparent;
+  color: $hig-text;
+  font-weight: 400;
+  font-size: 14px;
+  font-family: $hig-font-family;
+  line-height: 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  // FIX: was a bare, unscoped `input { cursor: default !important; }` rule
+  // that restyled every input in the consuming application.
+  cursor: default;
+
+  &::placeholder {
+    color: $hig-instructions;
+    transition: color 0.2s;
+  }
+
+  // The field opens a calendar rather than accepting typed text, so the
+  // wrapper's underline carries the focus affordance. A visible ring is still
+  // drawn for keyboard users (WCAG 2.4.7).
+  &:focus {
+    outline: none;
+  }
+
+  // Offset 0: the floating label sits directly above the input, so an
+  // outset ring would strike through it.
+  &:focus-visible {
+    outline: $hig-focus-ring;
+    outline-offset: 0;
+    border-radius: 2px;
+  }
+
+  &:disabled {
+    color: $hig-muted;
+    -webkit-text-fill-color: $hig-muted; // Safari ignores `color` when disabled
+    opacity: 1;
+  }
+}
+
+.hig__text-field-v1__input--no-value::placeholder {
+  color: transparent;
+}
+
+.hig__text-field-v1--clear-button-visible .hig__text-field-v1__input {
+  padding-right: 36px;
+}
+
+.hig__text-field-v1--button .hig__text-field-v1__input {
+  text-align: left;
+}
+
+.hig__text-field-v1__instructions,
+.hig__text-field-v1__required-notice {
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: $hig-instructions;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.hig__text-field-v1__required-notice::before {
+  content: "*";
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.hig__text-field-v1__errors {
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: $hig-error;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.hig__text-field-v1--with-errors .hig__text-field-v1__instructions {
+  color: $hig-error;
+  font-weight: 600;
+}
+
+.hig__text-field-v1__clear {
+  position: absolute;
+  right: 0;
+  width: 30px;
+  height: 30px;
+}
+
+.hig__text-field-v1--disabled .hig__text-field-v1__clear {
+  display: none;
+}
+
+// Clear button. Scoped under the text field so the class cannot collide with
+// an unrelated `.hig__icon-button` in the host application.
+.hig__text-field-v1 .hig__icon-button {
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: transparent;
+  color: #3b4454;
+  cursor: pointer;
+
+  &:hover {
+    color: $hig-teal;
+  }
+
+  // FIX: the 0.x stylesheet set `outline: 0` here, leaving keyboard users with
+  // no visible focus indicator (WCAG 2.4.7 Focus Visible).
+  &:focus-visible {
+    outline: $hig-focus-ring;
+    outline-offset: 1px;
+  }
+}
+
+.hig__icon-button__icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  transform: translate(-50%, -50%);
+}
