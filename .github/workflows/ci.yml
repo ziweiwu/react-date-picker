@@ -34,6 +34,12 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      # The pre-commit hook formats staged files, but hooks can be bypassed
+      # with --no-verify and are not installed on a fresh clone until
+      # `npm install` runs. CI is the backstop.
+      - name: Check formatting
+        run: npm run format:check
+
       - name: Typecheck
         run: npm run typecheck
 

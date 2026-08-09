@@ -25,6 +25,18 @@ build step in the loop.
   measured, since jsdom cannot rasterise. First run needs
   `npx playwright install chromium`.
 
+## Formatting
+
+Prettier formats the code; `npm install` installs a Husky pre-commit hook that
+runs `eslint --fix` and `prettier --write` over staged files only, so it stays
+fast. `npm run format` formats everything, `npm run format:check` verifies it,
+and CI runs the check as a backstop for hooks that were bypassed or never
+installed.
+
+Markdown is deliberately excluded — Prettier pads table cells to align them,
+which with the README's long image URLs produces unreadable lines. Docs are
+hand-wrapped.
+
 ## Checks
 
 - `npm run lint` — ESLint, including `jsx-a11y` accessibility rules.

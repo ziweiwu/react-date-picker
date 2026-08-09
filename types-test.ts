@@ -3,8 +3,6 @@
  * executed - `npm run typecheck` fails if the public API stops type-checking.
  */
 import * as React from "react";
-const badlyFormatted = { a: 1, b: 2, c: 3 };
-export { badlyFormatted };
 import DatePicker, { DatePicker as Named } from "./src/index";
 import type { DatePickerProps, DateLike } from "./src/index";
 

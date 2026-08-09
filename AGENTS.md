@@ -22,6 +22,7 @@ npm run build      # -> es/ (ESM), lib/ (CJS), css/datePicker.css
 npm run audit      # runtime deps only; must be 0 before any release
 npm run check:package  # asserts the tarball npm would publish is usable
 npm run screenshots    # regenerate docs/images/ embedded in the README
+npm run format         # Prettier; a pre-commit hook does this for staged files
 npm run demo:gif       # re-record docs/images/demo.gif; needs ffmpeg on PATH
 ```
 
