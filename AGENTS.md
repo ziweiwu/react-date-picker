@@ -172,19 +172,39 @@ in real Chromium. A green unit run is not evidence that contrast is fine.
 
 ## Releasing
 
+Releases are published by `.github/workflows/release.yml` when a `v*` tag is
+pushed. Nothing publishes from a branch, so a merge cannot ship a release by
+accident.
+
 ```sh
 # on master, clean tree
-npm ci && npm run lint && npm run typecheck && npm test && npm run test:e2e
-npm run build && npm run audit
-npm version <major|minor|patch>   # updates package.json + tags
-git push && git push --tags
-gh release create v<x.y.z> --notes-file <changelog section>
-npm publish                        # prepublishOnly re-runs lint + test + build
+npm version <major|minor|patch>   # bumps package.json and creates the tag
+git push && git push --tags       # the tag push triggers the release
 ```
 
-Then install the *published* package from the registry into a scratch project
-and exercise ESM import, CJS require and SSR. Publishing succeeding is not the
-same as the package working.
+The workflow refuses to publish if the tag disagrees with `package.json`, or if
+that version is already on the registry, then runs lint, typecheck, tests,
+build, the packaging check and an audit before `npm publish --provenance`.
+Provenance attaches a signed attestation tying the tarball to the commit and
+workflow run.
 
-Update `CHANGELOG.md` in the same commit as the version bump. Breaking changes
-need a migration note in `README.md`.
+Update `CHANGELOG.md` in the same commit as the version bump, and add a
+migration note to `README.md` for anything breaking. Cut the GitHub release
+from the changelog section (`gh release create v<x.y.z> --notes-file ...`).
+
+### Authentication
+
+The workflow needs one of these, configured once:
+
+1. **Trusted publishing (preferred).** On npmjs.com, under the package's
+   Settings, add a trusted publisher for this repository and
+   `release.yml`. npm then authenticates the workflow over OIDC and there is no
+   secret to store, leak or rotate.
+2. **A granular token.** `npm token create --packages react-hig-datepicker
+   --packages-and-scopes-permission read-write --name ci-release --expires 90`
+   (needs an OTP), stored as the `NPM_TOKEN` repository secret. Expires, so it
+   has to be rotated.
+
+Publishing from a laptop still works and is still gated by `prepublishOnly`,
+but it requires a 2FA one-time password every time, and it cannot produce
+provenance. Prefer the tag.

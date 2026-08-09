@@ -1,0 +1,78 @@
+name: Release
+
+# Publishing is driven by tags: push v1.2.3 and this publishes 1.2.3.
+# Nothing publishes from a branch, so an accidental merge cannot ship a release.
+on:
+  push:
+    tags: ["v*"]
+  # Allows a re-run without moving the tag, e.g. after a transient registry error.
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to publish (e.g. v1.2.0)"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: npm-publish
+    permissions:
+      contents: read
+      # Required both for npm trusted publishing (OIDC) and for --provenance.
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: npm
+          # Makes npm write the auth line it needs for NODE_AUTH_TOKEN.
+          registry-url: https://registry.npmjs.org
+
+      - run: npm ci
+
+      # A tag that disagrees with package.json means the version bump was
+      # forgotten or the wrong tag was pushed. Fail before publishing, not after.
+      - name: Check the tag matches package.json
+        run: |
+          TAG="${{ inputs.tag || github.ref_name }}"
+          TAG_VERSION="${TAG#v}"
+          PKG_VERSION="$(node -p "require('./package.json').version")"
+          echo "tag=$TAG_VERSION package.json=$PKG_VERSION"
+          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
+            echo "::error::Tag $TAG_VERSION does not match package.json $PKG_VERSION"
+            exit 1
+          fi
+
+      # Publishing an already-published version is a hard error from npm; catch
+      # it here with a clearer message.
+      - name: Check the version is not already published
+        run: |
+          PKG_VERSION="$(node -p "require('./package.json').version")"
+          if npm view "react-hig-datepicker@$PKG_VERSION" version >/dev/null 2>&1; then
+            echo "::error::react-hig-datepicker@$PKG_VERSION is already on the registry"
+            exit 1
+          fi
+
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npm run check:package
+      - run: npm audit --omit=dev --audit-level=low
+
+      - name: Publish to npm
+        # --provenance attaches a signed attestation linking the tarball to this
+        # workflow run and commit, which npm shows on the package page.
+        run: npm publish --provenance --access public
+        env:
+          # Ignored when trusted publishing (OIDC) is configured for the
+          # package; used as the fallback when it is not.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -61,3 +61,17 @@ and cannot resolve repository-relative links.
   bugs, not polish.
 - HIG colours live in `src/styles/_tokens.scss`. Any new colour must meet WCAG
   AA contrast (4.5:1 for text, 3:1 for non-text UI) against its background.
+
+## Releasing
+
+Bump, tag, push — the rest is automated:
+
+```sh
+npm version <major|minor|patch>
+git push && git push --tags
+```
+
+`.github/workflows/release.yml` verifies the tag matches `package.json`, checks
+the version is not already published, runs the full suite, and publishes with
+provenance. See the Releasing section of `AGENTS.md` for the one-time
+authentication setup.
