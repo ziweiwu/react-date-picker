@@ -1,5 +1,12 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+
+/** `boundingBox()` returns null for elements that are not rendered. */
+async function box(locator: Locator) {
+  const value = await locator.boundingBox();
+  if (!value) throw new Error("expected element to have a bounding box");
+  return value;
+}
 
 const FIELD = ".hig__text-field-v1";
 
@@ -17,8 +24,8 @@ test("opens the calendar below the field and picks a date", async ({ page }) => 
 
   // The popper is pinned below the input and left-aligned with it
   // (popperPlacement="bottom-start", flip disabled), as in 0.x.
-  const field = await input.boundingBox();
-  const popper = await calendar.boundingBox();
+  const field = await box(input);
+  const popper = await box(calendar);
   expect(popper.y).toBeGreaterThan(field.y);
   expect(Math.abs(popper.x - field.x)).toBeLessThan(40);
 
@@ -92,8 +99,13 @@ test("keeps the HIG visual invariants", async ({ page }) => {
   // label's line box is taller than its glyphs, so half-leading is removed
   // before comparing - that gap is empty space, not visible overlap.
   const overlap = await page.evaluate(() => {
-    const i = document.querySelector(".hig__text-field-v1__input");
-    const l = document.querySelector(".hig__text-field-v1__label");
+    const i = document.querySelector<HTMLInputElement>(
+      ".hig__text-field-v1__input",
+    );
+    const l = document.querySelector<HTMLLabelElement>(
+      ".hig__text-field-v1__label",
+    );
+    if (!i || !l) throw new Error("field or label missing");
     const ls = getComputedStyle(l);
     const halfLeading =
       (parseFloat(ls.lineHeight) - parseFloat(ls.fontSize)) / 2;

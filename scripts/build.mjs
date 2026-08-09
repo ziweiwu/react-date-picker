@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
-import { copyFileSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import * as sass from "sass";
@@ -10,7 +10,7 @@ const run = (cmd, args, env) =>
   execFileSync(cmd, args, { cwd: root, stdio: "inherit", env: { ...process.env, ...env } });
 
 console.log("• cleaning");
-for (const dir of ["es", "lib", "css"]) {
+for (const dir of ["es", "lib", "css", "types"]) {
   rmSync(resolve(root, dir), { recursive: true, force: true });
 }
 
@@ -50,9 +50,15 @@ writeFileSync(
   `${JSON.stringify({ type: "commonjs" }, null, 2)}\n`,
 );
 
+// Declarations are generated from the TypeScript sources rather than
+// hand-maintained, so the published types cannot drift from the implementation.
 console.log("• emitting type declarations");
+run("npx", ["tsc", "-p", "tsconfig.build.json"]);
+
+// Both entry points advertise types, so the generated tree is copied into each.
 for (const dir of ["es", "lib"]) {
-  copyFileSync(resolve(root, "src/index.d.ts"), resolve(root, dir, "index.d.ts"));
+  cpSync(resolve(root, "types"), resolve(root, dir), { recursive: true });
 }
+rmSync(resolve(root, "types"), { recursive: true, force: true });
 
 console.log("✓ build complete");
