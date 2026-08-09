@@ -159,6 +159,13 @@ in real Chromium. A green unit run is not evidence that contrast is fine.
 
 - `npm run audit` (runtime deps) must report 0. CI enforces this on every push;
   dev-dependency findings are worth fixing but do not reach consumers.
+- Dependabot security updates are enabled, so an advisory produces a PR without
+  anyone asking. `dependabot-auto-merge.yml` then merges it **only** when CI has
+  passed on that exact commit and the bump is compatible: same major, and for
+  0.x releases the same minor too, since semver lets a 0.x minor break.
+  Majors and grouped updates are always left for a human. Merging to master
+  does not publish - releases still require a deliberate tag - so an
+  auto-merged dependency cannot reach npm unnoticed.
 - Dependabot (`.github/dependabot.yml`) runs weekly over npm and GitHub Actions.
   Runtime deps get individual PRs; dev tooling is grouped to cut noise. React
   majors are deliberately ignored — widening the supported range is a decision,

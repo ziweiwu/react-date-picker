@@ -1,0 +1,94 @@
+name: Dependabot auto-merge
+
+# Dependabot already opens PRs for security advisories on its own. The gap this
+# closes is that nothing merged them, so fixes sat in the queue.
+#
+# Runs on workflow_run rather than pull_request so it fires only after CI has
+# actually finished on that exact commit, and so it does not need auto-merge or
+# branch protection to be configured first.
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Merge if this is a safe Dependabot update
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+
+          case "$BRANCH" in
+            dependabot/*) ;;
+            *) echo "Not a Dependabot branch; nothing to do."; exit 0 ;;
+          esac
+
+          PR_JSON="$(gh pr list --repo "$REPO" --head "$BRANCH" --state open \
+                       --json number,title,author,headRefOid --jq '.[0] // empty')"
+          if [ -z "$PR_JSON" ]; then
+            echo "No open PR for $BRANCH."; exit 0
+          fi
+
+          NUMBER="$(jq -r .number <<<"$PR_JSON")"
+          TITLE="$(jq -r .title <<<"$PR_JSON")"
+          AUTHOR="$(jq -r .author.login <<<"$PR_JSON")"
+          PR_SHA="$(jq -r .headRefOid <<<"$PR_JSON")"
+
+          # Only Dependabot's own PRs.
+          case "$AUTHOR" in
+            dependabot|app/dependabot|dependabot[bot]) ;;
+            *) echo "PR #$NUMBER is authored by $AUTHOR, not Dependabot."; exit 0 ;;
+          esac
+
+          # CI passed for the commit that was tested. If the branch has moved
+          # since, the green run no longer describes the code we would merge.
+          if [ "$PR_SHA" != "$HEAD_SHA" ]; then
+            echo "PR #$NUMBER moved past the tested commit ($HEAD_SHA); skipping."
+            exit 0
+          fi
+
+          # Dependabot titles are predictable: "... bump <name> from X to Y".
+          FROM="$(sed -nE 's/.* from ([0-9]+\.[0-9]+)\..*/\1/p' <<<"$TITLE" | head -1)"
+          TO="$(sed -nE 's/.* to ([0-9]+\.[0-9]+)\..*/\1/p' <<<"$TITLE" | head -1)"
+          FROM_MAJOR="${FROM%%.*}"
+          TO_MAJOR="${TO%%.*}"
+
+          if [ -z "$FROM" ] || [ -z "$TO" ]; then
+            # Grouped updates ("bump the actions group across 1 directory")
+            # carry no single version pair, so they are left for a human.
+            echo "Cannot determine the semver bump from: $TITLE"
+            echo "Leaving PR #$NUMBER for manual review."
+            exit 0
+          fi
+
+          if [ "$FROM_MAJOR" != "$TO_MAJOR" ]; then
+            echo "PR #$NUMBER is a major bump ($FROM -> $TO); majors are never"
+            echo "auto-merged - they change APIs and need a human."
+            exit 0
+          fi
+
+          # Under semver a 0.x minor bump is allowed to break, so for 0.x only
+          # patch releases qualify. This is not hypothetical: @floating-ui/react
+          # is a runtime dependency on 0.27.x.
+          if [ "$FROM_MAJOR" = "0" ] && [ "$FROM" != "$TO" ]; then
+            echo "PR #$NUMBER is a 0.x minor bump ($FROM -> $TO), which semver"
+            echo "permits to be breaking; leaving it for a human."
+            exit 0
+          fi
+
+          echo "PR #$NUMBER is a compatible update ($FROM -> $TO) with CI green; merging."
+          gh pr merge "$NUMBER" --repo "$REPO" --squash --delete-branch

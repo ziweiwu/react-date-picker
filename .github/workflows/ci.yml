@@ -5,6 +5,10 @@ on:
     branches: [master]
   pull_request:
     branches: [master]
+  # A quiet repo can still be affected by a newly published advisory, so the
+  # audit job runs weekly rather than only when someone pushes.
+  schedule:
+    - cron: "17 6 * * 1"
 
 permissions:
   contents: read
