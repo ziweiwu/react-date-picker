@@ -41,9 +41,10 @@ build step in the loop.
 
 ## Conventions
 
-- The component must stay installable on React 16.9 through 19. Adding a
-  runtime dependency that peer-locks to a narrower range is what made 0.1.x
-  unusable, so avoid it.
+- The component must stay installable on React 18 and 19. Adding a runtime
+  dependency that peer-locks to a narrower range is what made 0.1.x unusable,
+  so avoid it. The CI `peer-compat` job installs the packed tarball against
+  each supported major and will catch it.
 - Accessibility changes need a matching test. WCAG regressions are treated as
   bugs, not polish.
 - HIG colours live in `src/styles/_tokens.scss`. Any new colour must meet WCAG

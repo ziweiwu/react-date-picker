@@ -12,9 +12,14 @@ export default defineConfig({
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
-    command: "npx vite --config vite.demo.config.js --port 5174 --strictPort",
+    // Bind 127.0.0.1 explicitly: `localhost` can resolve to ::1 first, which
+    // leaves the IPv4 URL Playwright polls unreachable and times the run out.
+    command:
+      "npx vite --config vite.demo.config.js --host 127.0.0.1 --port 5174 --strictPort",
     url: "http://127.0.0.1:5174",
     reuseExistingServer: !process.env.CI,
-    timeout: 60_000,
+    timeout: 120_000,
+    stdout: "pipe",
+    stderr: "pipe",
   },
 });

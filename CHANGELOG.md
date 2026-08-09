@@ -22,7 +22,13 @@ React 17+ at all, because its `@hig/*` dependencies were peer-locked to React
   CSS as a side effect of importing the component.
 - **`propTypes` removed.** React 19 ignores them at runtime; bundled
   TypeScript declarations replace them.
-- Minimum React version is 16.9. Minimum Node version for development is 18.
+- **Minimum React version is 18.** react-datepicker 9 itself supports 16.9+,
+  but this component uses `useId` for the unique-id fix above, which React 17
+  does not have. The alternative - a counter-based id - reintroduces the SSR
+  hydration mismatches that `useId` exists to prevent, so raising the floor was
+  preferred over shipping a shim. React 17 also has no `exports` map, so
+  `react/jsx-runtime` is unresolvable there under Node ESM. Minimum Node
+  version for development is 18.
 
 ### Fixed
 

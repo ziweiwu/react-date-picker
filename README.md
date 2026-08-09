@@ -3,7 +3,7 @@
 An accessible React date picker styled with the Autodesk HIG design language.
 
 - Built on [react-datepicker](https://github.com/Hacker0x01/react-datepicker) 9
-- Works with React 16.9 → 19, in both ESM and CommonJS, and renders on the server
+- Works with React 18 and 19, in both ESM and CommonJS, and renders on the server
 - No runtime dependency on the deprecated `@hig/*` packages
 - Zero known vulnerabilities in runtime dependencies
 
