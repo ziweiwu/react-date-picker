@@ -34,6 +34,13 @@ count went from 23 unit / 7 browser to 35 unit / 9 browser.
   `useImperativeHandle` with a cast that hid a possible `null`. The caller's ref
   is forwarded directly, so it always tracks the live instance.
 
+### Documentation
+
+- The README hero is now an animated recording of the picker in use
+  (`docs/images/demo.gif`), re-recordable with `npm run demo:gif`. Like the
+  stills, it pins the browser clock so the recording does not drift with the
+  real calendar. Requires ffmpeg.
+
 ### Changed
 
 - Clearing now leaves the calendar open, because focus returns to the field and
