@@ -9,7 +9,8 @@
  *   npm run screenshots
  */
 import { spawn } from "node:child_process";
-import { mkdirSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { mkdirSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "@playwright/test";
@@ -77,10 +78,12 @@ await shot("instruction", "field-instruction.png");
 await shot("disabled", "field-disabled.png");
 
 console.log("• capturing keyboard focus");
-await page.locator("[data-shot='filled'] input").focus();
-await page.keyboard.press("Escape"); // close the calendar, keep focus
-await page.waitForTimeout(400); // let the floating label settle
-await shot("filled", "field-focused.png");
+// Do NOT press Escape here: react-datepicker's Escape handler blurs the
+// input, which silently produced a duplicate of the unfocused shot. The
+// dedicated target sets `preventOpenOnFocus` so no calendar bleeds into frame.
+await page.locator("[data-shot='focused'] input").focus();
+await page.waitForTimeout(400); // let the floating label transition settle
+await shot("focused", "field-focused.png");
 
 console.log("• capturing the open calendar");
 await page.locator("#calendar-shot").click();
@@ -101,4 +104,24 @@ await shot("calendar", "calendar-hover.png");
 
 await browser.close();
 server.kill();
-console.log("✓ screenshots written to docs/images/");
+
+// Two captures coming out byte-identical means an interaction silently failed
+// to change the UI - which is how a "keyboard focus" shot once shipped as a
+// copy of the unfocused field. Fail loudly instead.
+const digests = new Map();
+for (const file of readdirSync(outDir).filter((f) => f.endsWith(".png"))) {
+  const hash = createHash("sha256")
+    .update(readFileSync(resolve(outDir, file)))
+    .digest("hex");
+  const twin = digests.get(hash);
+  if (twin) {
+    console.error(
+      `\n✗ ${file} is byte-identical to ${twin}. The interaction meant to ` +
+        `distinguish them had no effect on the rendered UI.`,
+    );
+    process.exit(1);
+  }
+  digests.set(hash, file);
+}
+
+console.log(`✓ ${digests.size} distinct screenshots written to docs/images/`);

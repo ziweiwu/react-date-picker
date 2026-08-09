@@ -71,6 +71,21 @@ function Screenshots() {
         />
       </Shot>
 
+      {/*
+        `preventOpenOnFocus` keeps the calendar shut so the focus-ring capture
+        is not polluted by the popper opening underneath it. The field's
+        focused appearance is identical either way.
+      */}
+      <Shot name="focused">
+        <DatePicker
+          label="Departure date"
+          onChange={setWithValue}
+          preventOpenOnFocus
+          selected={withValue}
+          showClearButton
+        />
+      </Shot>
+
       <Shot name="instruction">
         <DatePicker
           instruction="Bookings open 30 days ahead"
