@@ -1,25 +1,50 @@
+# Contributing
+
 ## Prerequisites
 
-[Node.js](http://nodejs.org/) >= v4 must be installed.
+[Node.js](https://nodejs.org/) >= 18.
 
 ## Installation
 
-- Running `npm install` in the component's root directory will install everything you need for development.
+`npm install` in the repository root installs everything needed for
+development.
 
-## Demo Development Server
+## Demo development server
 
-- `npm start` will run a development server with the component's demo app at [http://localhost:3000](http://localhost:3000) with hot module reloading.
+`npm start` serves the demo app at <http://localhost:5173> with hot module
+reloading. The demo imports the component straight from `src/`, so there is no
+build step in the loop.
 
-## Running Tests
+## Tests
 
-- `npm test` will run the tests once.
+- `npm test` — unit and integration tests (Vitest + Testing Library, jsdom).
+- `npm run test:watch` — the same suite in watch mode.
+- `npm run test:coverage` — writes a coverage report to `coverage/`.
+- `npm run test:e2e` — browser tests (Playwright + axe). These run the demo
+  against real Chromium and are the only place colour contrast is genuinely
+  measured, since jsdom cannot rasterise. First run needs
+  `npx playwright install chromium`.
 
-- `npm run test:coverage` will run the tests and produce a coverage report in `coverage/`.
+## Checks
 
-- `npm run test:watch` will run the tests on every change.
+- `npm run lint` — ESLint, including `jsx-a11y` accessibility rules.
+- `npm run typecheck` — compiles `src/index.d.ts` against `types-test.ts` so
+  the published type declarations cannot drift from the implementation.
+- `npm audit --omit=dev` — must report zero vulnerabilities in runtime
+  dependencies.
 
 ## Building
 
-- `npm run build` will build the component for publishing to npm and also bundle the demo app.
+- `npm run build` produces `es/` (ESM), `lib/` (CommonJS) and
+  `css/datePicker.css`.
+- `npm run clean` deletes build output.
 
-- `npm run clean` will delete built resources.
+## Conventions
+
+- The component must stay installable on React 16.9 through 19. Adding a
+  runtime dependency that peer-locks to a narrower range is what made 0.1.x
+  unusable, so avoid it.
+- Accessibility changes need a matching test. WCAG regressions are treated as
+  bugs, not polish.
+- HIG colours live in `src/styles/_tokens.scss`. Any new colour must meet WCAG
+  AA contrast (4.5:1 for text, 3:1 for non-text UI) against its background.

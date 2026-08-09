@@ -1,0 +1,209 @@
+// react-hig-datepicker stylesheet.
+//
+// Consumers import the compiled result:
+//   import "react-hig-datepicker/styles.css";
+//
+// react-datepicker's own SCSS variables are configured before its stylesheet
+// is loaded, which is how Sass module configuration works now that the library
+// has moved from `@import` to `@use`.
+
+@use "tokens" as *;
+
+@use "react-datepicker/src/stylesheets/variables" with (
+  $datepicker__background-color: #ffffff,
+  $datepicker__border-color: #d4dbe1,
+  $datepicker__border-radius: 0.2rem,
+  $datepicker__day-margin: 0.166rem,
+  // Parenthesised so the comma is part of the font stack, not an
+  // argument separator in the `with (...)` configuration.
+  $datepicker__font-family: (ArtifaktElement, sans-serif),
+  $datepicker__font-size: 14px,
+  $datepicker__header-color: #222934,
+  $datepicker__highlighted-color: #87bc40,
+  $datepicker__item-size: 1.7rem,
+  $datepicker__margin: 0.4rem,
+  // FIX: #999 failed AA (2.85:1 on white).
+  $datepicker__muted-color: #6b7280,
+  // FIX: #0696d7 gave white text only 3.31:1.
+  $datepicker__selected-color: #05719e,
+  $datepicker__text-color: #222934
+);
+
+@use "react-datepicker/src/stylesheets/datepicker";
+@use "hig-text-field";
+
+/* ---------------------------------------------------------------------------
+   Calendar
+   ------------------------------------------------------------------------- */
+
+.react-datepicker {
+  border-radius: 2px;
+  box-shadow: 0 0 4px rgba(34, 41, 52, 0.25);
+  line-height: 16px;
+  // The calendar is a control surface, not prose: dragging across it should
+  // not select text.
+  user-select: none;
+}
+
+// Hide leading/trailing days from adjacent months, as in 0.x.
+.react-datepicker__day--outside-month {
+  visibility: hidden;
+}
+
+.react-datepicker__day {
+  width: $hig-day-size;
+  height: $hig-day-size;
+  margin: 0;
+  border-radius: 0;
+  line-height: $hig-day-size;
+
+  // HIG day cells are square. react-datepicker rounds them on `:hover` and on
+  // its state modifiers, which outrank a bare `.react-datepicker__day` rule,
+  // so every state is squared off explicitly. (0.x used `!important` here.)
+  &:hover,
+  &--selected,
+  &--keyboard-selected,
+  &--today,
+  &--in-range,
+  &--in-selecting-range,
+  &--range-start,
+  &--range-end {
+    border-radius: 0;
+  }
+
+  // Today's date reads as HIG blue and bold unless another state applies.
+  &--today:not(&--selected):not(:hover):not(&--disabled):not(&--in-range):not(&--in-selecting-range):not(&--keyboard-selected) {
+    color: $hig-blue-accessible;
+    font-weight: bold;
+  }
+
+  &:hover:not(&--disabled) {
+    // react-datepicker's own hover rule is
+    // `.react-datepicker__day:not([aria-disabled="true"]):hover`, which
+    // outranks a plain `:hover`, so the square corner is restated here where
+    // the specificity matches.
+    border-radius: 0;
+    background-color: $hig-blue-hover;
+    color: $hig-white;
+  }
+
+  &--disabled {
+    background-color: $hig-white;
+    color: $hig-muted;
+    cursor: not-allowed;
+  }
+
+  &--in-selecting-range:not(&--in-range) {
+    background-color: $hig-blue-hover;
+    color: $hig-white;
+  }
+
+  // FIX: keyboard navigation through the calendar had no visible indicator.
+  &:focus-visible {
+    outline: $hig-focus-ring;
+    outline-offset: -2px;
+  }
+}
+
+// The keyboard cursor. react-datepicker's default is an off-brand light blue;
+// this keeps the same "focus lives here" meaning in the HIG palette, with a
+// tint light enough to keep the day number legible.
+.react-datepicker__day--keyboard-selected {
+  background-color: #cfe6f2;
+  color: $hig-text;
+
+  &:hover {
+    background-color: $hig-blue-hover;
+    color: $hig-white;
+  }
+}
+
+.react-datepicker__current-month {
+  margin-top: 8px;
+  color: $hig-text;
+  font-size: 14px;
+}
+
+.react-datepicker__day-names {
+  margin-top: 10px;
+  margin-right: 16px;
+  margin-left: 16px;
+  // FIX: 0.x used `opacity: 0.5`, which dropped the day initials below AA.
+  // The muted token is legible on its own.
+  color: $hig-muted;
+}
+
+.react-datepicker__day-name {
+  width: $hig-day-size;
+  height: $hig-day-size;
+  margin: 1px;
+  color: $hig-muted;
+}
+
+/* ---------------------------------------------------------------------------
+   Month navigation - HIG caret icons
+   ------------------------------------------------------------------------- */
+
+.react-datepicker__navigation {
+  position: absolute;
+  top: 15px;
+  z-index: 1;
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  text-align: center;
+  cursor: pointer;
+
+  // react-datepicker 9 renders its own chevron in a child span; the HIG caret
+  // is supplied as a background image instead.
+  .react-datepicker__navigation-icon {
+    display: none;
+  }
+
+  &:focus-visible {
+    outline: $hig-focus-ring;
+    outline-offset: 2px;
+  }
+
+  &--previous {
+    margin-left: 8px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpolygon points='3.65 8.09 9.95 1.79 11.72 3.56 7.18 8.09 11.72 12.63 9.95 14.4 3.65 8.09'/%3E%3C/svg%3E");
+
+    &:hover {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='%2317a294'%3E%3Cpolygon points='3.65 8.09 9.95 1.79 11.72 3.56 7.18 8.09 11.72 12.63 9.95 14.4 3.65 8.09'/%3E%3C/svg%3E");
+    }
+  }
+
+  &--next {
+    margin-right: 8px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpolygon points='4.28 12.63 8.82 8.09 4.28 3.56 6.05 1.79 12.35 8.09 6.05 14.4 4.28 12.63'/%3E%3C/svg%3E");
+
+    &:hover {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='%2317a294'%3E%3Cpolygon points='4.28 12.63 8.82 8.09 4.28 3.56 6.05 1.79 12.35 8.09 6.05 14.4 4.28 12.63'/%3E%3C/svg%3E");
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Forced-colors / high-contrast support
+   ------------------------------------------------------------------------- */
+
+@media (forced-colors: active) {
+  .react-datepicker__day--selected,
+  .react-datepicker__day:hover:not(.react-datepicker__day--disabled) {
+    forced-color-adjust: none;
+    background-color: Highlight;
+    color: HighlightText;
+  }
+
+  .react-datepicker__navigation:focus-visible,
+  .hig__text-field-v1__input:focus-visible,
+  .hig__text-field-v1 .hig__icon-button:focus-visible {
+    outline: 2px solid CanvasText;
+  }
+}

@@ -1,21 +1,30 @@
 # Security Policy
 
-## Supported Versions
+## Supported versions
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+| Version | Supported          | Notes                                                        |
+| ------- | ------------------ | ------------------------------------------------------------ |
+| 1.x     | :white_check_mark: | Current release line.                                         |
+| 0.1.x   | :x:                | Depends on end-of-life React 15/16 packages. Upgrade to 1.x.  |
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+## Reporting a vulnerability
 
-## Reporting a Vulnerability
+Please report suspected vulnerabilities privately through GitHub's
+[security advisory form](https://github.com/ziweiwu/react-date-picker/security/advisories/new)
+rather than opening a public issue.
 
-Use this section to tell people how to report a vulnerability.
+Expect an acknowledgement within 7 days. If the report is accepted, a fix
+and an advisory will normally follow within 30 days; if it is declined, you
+will get an explanation of why.
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+## Scope
+
+This package is a client-side React component with no network or filesystem
+access. The most likely classes of issue are:
+
+- a vulnerable transitive dependency,
+- unsanitised rendering of caller-supplied content,
+- a defect that breaks a documented accessibility guarantee.
+
+Runtime dependencies are audited on every push (`npm audit --omit=dev`) and
+the source is scanned with CodeQL.
