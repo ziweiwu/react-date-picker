@@ -38,6 +38,14 @@ jobs:
           # Makes npm write the auth line it needs for NODE_AUTH_TOKEN.
           registry-url: https://registry.npmjs.org
 
+      # Node 22 bundles npm 10, which predates OIDC trusted publishing. Without
+      # this the publish step fails with ENEEDAUTH even when the package is
+      # correctly configured for it.
+      - name: Use an npm that supports trusted publishing
+        run: |
+          npm install -g npm@^11.5.0
+          echo "npm $(npm -v) on node $(node -v)"
+
       - run: npm ci
 
       # A tag that disagrees with package.json means the version bump was
