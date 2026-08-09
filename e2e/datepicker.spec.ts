@@ -15,7 +15,9 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator(FIELD).first()).toBeVisible();
 });
 
-test("opens the calendar below the field and picks a date", async ({ page }) => {
+test("opens the calendar below the field and picks a date", async ({
+  page,
+}) => {
   const input = page.getByLabel("Select a date");
   await input.click();
 

@@ -28,13 +28,25 @@ mkdirSync(outDir, { recursive: true });
 
 const server = spawn(
   "npx",
-  ["vite", "--config", "vite.demo.config.mts", "--host", "127.0.0.1", "--port", String(PORT), "--strictPort"],
+  [
+    "vite",
+    "--config",
+    "vite.demo.config.mts",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    String(PORT),
+    "--strictPort",
+  ],
   { cwd: root, stdio: "ignore" },
 );
 
 const shutdown = () => server.kill();
 process.on("exit", shutdown);
-process.on("SIGINT", () => { shutdown(); process.exit(1); });
+process.on("SIGINT", () => {
+  shutdown();
+  process.exit(1);
+});
 
 async function waitForServer(timeoutMs = 60_000) {
   const deadline = Date.now() + timeoutMs;

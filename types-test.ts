@@ -34,6 +34,9 @@ const _options: DatePickerProps = {
 };
 
 // Props forwarded straight to react-datepicker stay available.
-const _passthrough: DatePickerProps = { dateFormat: "yyyy-MM-dd", inline: true };
+const _passthrough: DatePickerProps = {
+  dateFormat: "yyyy-MM-dd",
+  inline: true,
+};
 
 export { _sameComponent, _basic, _coerced, _options, _passthrough };

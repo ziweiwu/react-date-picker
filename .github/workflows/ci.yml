@@ -34,6 +34,12 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      # The pre-commit hook formats staged files, but hooks can be bypassed
+      # with --no-verify and are not installed on a fresh clone until
+      # `npm install` runs. CI is the backstop.
+      - name: Check formatting
+        run: npm run format:check
+
       - name: Typecheck
         run: npm run typecheck
 
@@ -84,7 +90,7 @@ jobs:
       - run: npm ci
 
       # Run before regenerating anything, while the tree still matches the commit.
-      - name: Flag stylesheet changes that skipped the screenshots
+      - name: Flag appearance changes that skipped the screenshots
         run: |
           BASE="${{ github.event.pull_request.base.sha || github.event.before }}"
           if [ -z "$BASE" ] || [ "$BASE" = "0000000000000000000000000000000000000000" ] \
@@ -93,24 +99,33 @@ jobs:
             exit 0
           fi
 
-          CHANGED="$(git diff --name-only "$BASE" HEAD)"
-          echo "$CHANGED" | sed 's/^/  /'
+          # Compare the compiled CSS rather than the SCSS sources. Reformatting
+          # the stylesheet changes the source without moving a rendered pixel,
+          # and a check that fires on formatting is one people learn to ignore.
+          HEAD_FP="$(node scripts/style-fingerprint.mjs src/styles)"
 
-          if ! echo "$CHANGED" | grep -q '^src/styles/'; then
-            echo "Stylesheet untouched; nothing to check."
+          rm -rf /tmp/base-styles && mkdir -p /tmp/base-styles
+          if ! git archive "$BASE" src/styles 2>/dev/null | tar -x -C /tmp/base-styles; then
+            echo "Base commit has no src/styles; skipping."
             exit 0
           fi
-          if echo "$CHANGED" | grep -q '^docs/images/'; then
-            echo "Stylesheet and images both updated."
+          BASE_FP="$(node scripts/style-fingerprint.mjs /tmp/base-styles/src/styles)"
+          echo "compiled CSS: base=${BASE_FP:0:16} head=${HEAD_FP:0:16}"
+
+          if [ "$HEAD_FP" = "$BASE_FP" ]; then
+            echo "Compiled CSS unchanged; the screenshots cannot be stale."
             exit 0
           fi
-          # Escape hatch for style edits with no visual effect (renames, comments).
+          if git diff --name-only "$BASE" HEAD | grep -q '^docs/images/'; then
+            echo "Appearance changed and the images were regenerated."
+            exit 0
+          fi
           if git log --format=%B "$BASE"..HEAD | grep -qF '[skip-images]'; then
             echo "Opted out via [skip-images]."
             exit 0
           fi
 
-          echo "::error::src/styles changed but docs/images did not. The README"                "screenshots may now misrepresent the component. Run"                "'npm run screenshots' (and 'npm run demo:gif' if the animation is"                "affected) and commit the result, or add [skip-images] to the commit"                "message if the change has no visual effect."
+          echo "::error::The compiled stylesheet changed but docs/images did not, so the README screenshots may now misrepresent the component. Run 'npm run screenshots' (and 'npm run demo:gif' if the animation is affected) and commit the result, or add [skip-images] to the commit message."
           exit 1
 
       - run: npx playwright install --with-deps chromium

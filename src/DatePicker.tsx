@@ -66,7 +66,9 @@ function isArray<T>(value: readonly T[] | undefined): value is readonly T[] {
  * exposing `toDate()` is accepted and converted.
  */
 export function toDate(value: DateLike): Date | null;
-export function toDate(value: DateLike | null | undefined): Date | null | undefined;
+export function toDate(
+  value: DateLike | null | undefined,
+): Date | null | undefined;
 export function toDate(
   value: DateLike | null | undefined,
 ): Date | null | undefined {
@@ -113,7 +115,9 @@ function toExcludeDates(
   return value.flatMap((entry) => {
     if (isDateLikeWithMessage(entry)) {
       const date = toDate(entry.date);
-      return date ? [{ date, ...(entry.message ? { message: entry.message } : {}) }] : [];
+      return date
+        ? [{ date, ...(entry.message ? { message: entry.message } : {}) }]
+        : [];
     }
     const date = toDate(entry);
     return date ? [{ date }] : [];

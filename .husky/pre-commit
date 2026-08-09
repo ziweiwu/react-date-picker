@@ -1,0 +1,3 @@
+# Formats and lints only what is staged, so the hook stays fast enough that
+# nobody reaches for --no-verify. Type-checking and tests are left to CI.
+npx lint-staged

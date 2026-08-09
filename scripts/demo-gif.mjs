@@ -37,12 +37,24 @@ const workDir = mkdtempSync(resolve(tmpdir(), "hig-datepicker-demo-"));
 
 const server = spawn(
   "npx",
-  ["vite", "--config", "vite.demo.config.mts", "--host", "127.0.0.1", "--port", String(PORT), "--strictPort"],
+  [
+    "vite",
+    "--config",
+    "vite.demo.config.mts",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    String(PORT),
+    "--strictPort",
+  ],
   { cwd: root, stdio: "ignore" },
 );
 const shutdown = () => server.kill();
 process.on("exit", shutdown);
-process.on("SIGINT", () => { shutdown(); process.exit(1); });
+process.on("SIGINT", () => {
+  shutdown();
+  process.exit(1);
+});
 
 async function waitForServer(timeoutMs = 60_000) {
   const deadline = Date.now() + timeoutMs;
@@ -111,7 +123,8 @@ await context.addInitScript(() => {
           zIndex: "2147483646",
           pointerEvents: "none",
           transform: "translate(-50%, -50%)",
-          transition: "width 320ms ease-out, height 320ms ease-out, opacity 320ms ease-out",
+          transition:
+            "width 320ms ease-out, height 320ms ease-out, opacity 320ms ease-out",
           opacity: "1",
         });
         document.body.appendChild(ring);
@@ -145,14 +158,25 @@ let at = { x: 380, y: 400 };
 
 /** Move the pointer in small steps so the recording shows travel, not teleport. */
 async function glide(target, steps = 22) {
-  const locator = typeof target === "string" ? page.locator(target) : target.boundingBox ? target : null;
+  const locator =
+    typeof target === "string"
+      ? page.locator(target)
+      : target.boundingBox
+        ? target
+        : null;
   const box = locator ? await locator.boundingBox() : null;
-  if (locator && !box) throw new Error(`glide target is not visible: ${locator}`);
-  const to = box ? { x: box.x + box.width / 2, y: box.y + box.height / 2 } : target;
+  if (locator && !box)
+    throw new Error(`glide target is not visible: ${locator}`);
+  const to = box
+    ? { x: box.x + box.width / 2, y: box.y + box.height / 2 }
+    : target;
   for (let i = 1; i <= steps; i++) {
     const t = i / steps;
     const ease = t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2; // ease-in-out
-    await page.mouse.move(at.x + (to.x - at.x) * ease, at.y + (to.y - at.y) * ease);
+    await page.mouse.move(
+      at.x + (to.x - at.x) * ease,
+      at.y + (to.y - at.y) * ease,
+    );
     await wait(12);
   }
   at = to;
@@ -223,7 +247,18 @@ const filters =
   "[s0]palettegen=stats_mode=diff[p];[s1][p]paletteuse=dither=bayer:bayer_scale=4:diff_mode=rectangle";
 const ff = spawnSync(
   "ffmpeg",
-  ["-y", "-ss", blankLeadIn.toFixed(2), "-i", resolve(workDir, video), "-vf", filters, "-loop", "0", outFile],
+  [
+    "-y",
+    "-ss",
+    blankLeadIn.toFixed(2),
+    "-i",
+    resolve(workDir, video),
+    "-vf",
+    filters,
+    "-loop",
+    "0",
+    outFile,
+  ],
   { stdio: "inherit" },
 );
 rmSync(workDir, { recursive: true, force: true });
@@ -232,4 +267,5 @@ if (ff.status !== 0) process.exit(ff.status ?? 1);
 const kb = Math.round(statSync(outFile).size / 1024);
 console.log(`✓ docs/images/demo.gif (${kb} KB)`);
 // A README GIF is downloaded on every page view; keep it honest.
-if (kb > 3072) console.warn(`! ${kb} KB is large for a README - shorten the sequence.`);
+if (kb > 3072)
+  console.warn(`! ${kb} KB is large for a README - shorten the sequence.`);
