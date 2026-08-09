@@ -15,7 +15,7 @@ export default defineConfig({
     // Bind 127.0.0.1 explicitly: `localhost` can resolve to ::1 first, which
     // leaves the IPv4 URL Playwright polls unreachable and times the run out.
     command:
-      "npx vite --config vite.demo.config.js --host 127.0.0.1 --port 5174 --strictPort",
+      "npx vite --config vite.demo.config.ts --host 127.0.0.1 --port 5174 --strictPort",
     url: "http://127.0.0.1:5174",
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

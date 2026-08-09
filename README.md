@@ -3,6 +3,7 @@
 An accessible React date picker styled with the Autodesk HIG design language.
 
 - Built on [react-datepicker](https://github.com/Hacker0x01/react-datepicker) 9
+- Written in TypeScript; declarations are generated from source and ship with the package
 - Works with React 18 and 19, in both ESM and CommonJS, and renders on the server
 - No runtime dependency on the deprecated `@hig/*` packages
 - Zero known vulnerabilities in runtime dependencies
@@ -83,7 +84,9 @@ timestamp, or any object with a `toDate()` method (moment, dayjs).
 `popperPlacement` and `withPortal` are controlled by this component to keep the
 HIG presentation intact.
 
-TypeScript declarations are bundled; no `@types` package is needed.
+TypeScript declarations are generated from the source and bundled; no `@types`
+package is needed. Range and multi-date selection are not supported, so
+`selectsRange` and `selectsMultiple` are rejected at compile time.
 
 ## Accessibility
 
@@ -108,7 +111,7 @@ npm start          # demo at http://localhost:5173
 npm test           # unit tests (Vitest + Testing Library)
 npm run test:e2e   # browser tests (Playwright + axe)
 npm run lint
-npm run typecheck  # checks the published .d.ts
+npm run typecheck  # type-checks the whole project
 npm run build      # -> es/, lib/, css/
 ```
 

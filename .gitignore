@@ -213,6 +213,7 @@ yarn-error.log*
 /lib/
 /es/
 /css/
+/types/
 /demo/dist/
 
 # packed tarballs

@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { axe } from "vitest-axe";
+import axe from "axe-core";
 import { describe, expect, it, vi } from "vitest";
 import DatePicker from "./index.js";
+import type { DateLike } from "./index.js";
 
 const SEPT_15 = new Date(2017, 8, 15);
 
@@ -12,14 +13,22 @@ function getInput() {
 }
 
 /**
+ * Run axe and return violation ids, so a failure names the rule instead of
+ * dumping the whole result object.
+ *
  * axe's colour-contrast rule needs a real canvas to sample rendered pixels,
- * which jsdom does not provide, so it is disabled here. Contrast is verified
- * numerically against the tokens in src/styles/_tokens.scss instead.
+ * which jsdom does not provide, so it is disabled here. Contrast is checked
+ * for real in the Playwright suite.
  */
-const AXE_OPTIONS = { rules: { "color-contrast": { enabled: false } } };
+async function axeViolations(container: HTMLElement): Promise<string[]> {
+  const { violations } = await axe.run(container, {
+    rules: { "color-contrast": { enabled: false } },
+  });
+  return violations.map((v) => `${v.id}: ${v.help}`);
+}
 
 /** Minimal stand-in for a moment/dayjs instance. */
-function momentLike(date) {
+function momentLike(date: Date): DateLike {
   return { toDate: () => date };
 }
 
@@ -55,7 +64,9 @@ describe("DatePicker", () => {
           <DatePicker label="Second" />
         </>,
       );
-      const [first, second] = screen.getAllByRole("textbox");
+      const inputs = screen.getAllByRole("textbox");
+      expect(inputs).toHaveLength(2);
+      const [first, second] = inputs as [HTMLElement, HTMLElement];
       expect(first.id).toBeTruthy();
       expect(second.id).toBeTruthy();
       expect(first.id).not.toBe(second.id);
@@ -129,8 +140,12 @@ describe("DatePicker", () => {
       );
 
       expect(onChange).toHaveBeenCalledTimes(1);
-      const [picked] = onChange.mock.calls[0];
+      const firstCall = onChange.mock.calls[0];
+      expect(firstCall).toBeDefined();
+      const [picked] = firstCall as [Date | null];
       expect(picked).toBeInstanceOf(Date);
+      // Narrow for the assertions below; toBeInstanceOf already proved it.
+      if (!(picked instanceof Date)) throw new Error("expected a Date");
       expect(picked.getFullYear()).toBe(2017);
       expect(picked.getMonth()).toBe(8);
       expect(picked.getDate()).toBe(20);
@@ -138,7 +153,7 @@ describe("DatePicker", () => {
 
     it("closes after selection when closeOnSelect is set", async () => {
       function Controlled() {
-        const [date, setDate] = useState(SEPT_15);
+        const [date, setDate] = useState<Date | null>(SEPT_15);
         return <DatePicker label="Date" onChange={setDate} selected={date} />;
       }
       render(<Controlled />);
@@ -252,7 +267,7 @@ describe("DatePicker", () => {
           showInstruction
         />,
       );
-      expect(await axe(container, AXE_OPTIONS)).toHaveNoViolations();
+      expect(await axeViolations(container)).toEqual([]);
     });
 
     it("has no violations when the calendar is open", async () => {
@@ -261,7 +276,7 @@ describe("DatePicker", () => {
       );
       await userEvent.click(getInput());
       await screen.findByRole("dialog");
-      expect(await axe(container, AXE_OPTIONS)).toHaveNoViolations();
+      expect(await axeViolations(container)).toEqual([]);
     });
   });
 });

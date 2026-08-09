@@ -1,22 +1,35 @@
 import js from "@eslint/js";
 import globals from "globals";
+import tseslint from "typescript-eslint";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 
-export default [
+export default tseslint.config(
   {
-    ignores: ["es/**", "lib/**", "css/**", "demo/dist/**", "coverage/**"],
+    ignores: [
+      "es/**",
+      "lib/**",
+      "css/**",
+      "types/**",
+      "demo/dist/**",
+      "coverage/**",
+      "playwright-report/**",
+      "test-results/**",
+    ],
   },
   js.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
   {
-    files: ["**/*.{js,jsx,mjs}"],
+    files: ["**/*.{ts,tsx,mjs}"],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "module",
       globals: { ...globals.browser, ...globals.node },
       parserOptions: {
         ecmaFeatures: { jsx: true },
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
       },
     },
     settings: { react: { version: "detect" } },
@@ -30,21 +43,20 @@ export default [
       ...react.configs.flat["jsx-runtime"].rules,
       ...reactHooks.configs.recommended.rules,
       ...jsxA11y.flatConfigs.strict.rules,
-      // Types are published as hand-written declarations in src/index.d.ts;
-      // React 19 ignores propTypes at runtime.
+      // Types are declared in TypeScript; React 19 ignores propTypes anyway.
       "react/prop-types": "off",
       // Bindings prefixed with _ are intentionally discarded (e.g. props
       // destructured only to keep them out of a rest spread).
-      "no-unused-vars": [
+      "@typescript-eslint/no-unused-vars": [
         "error",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
+      "no-unused-vars": "off",
     },
   },
   {
-    files: ["**/*.test.{js,jsx}", "vitest.setup.js"],
-    languageOptions: {
-      globals: { ...globals.browser, ...globals.node },
-    },
+    // Build scripts are plain ESM JavaScript, not part of the TS program.
+    files: ["scripts/**/*.mjs", "*.config.mjs"],
+    ...tseslint.configs.disableTypeChecked,
   },
-];
+);

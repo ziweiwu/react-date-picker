@@ -14,7 +14,7 @@ export default defineConfig({
     minify: false,
     target: "es2019",
     lib: {
-      entry: "src/index.js",
+      entry: "src/index.ts",
       formats: [format],
       fileName: () => "index.js",
     },

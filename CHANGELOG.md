@@ -3,6 +3,36 @@
 All notable changes to this project are documented here. This project follows
 [Semantic Versioning](https://semver.org/).
 
+## 1.1.0
+
+Rewritten in TypeScript. No runtime behaviour changed; every test from 1.0.0
+passes unmodified.
+
+### Added
+
+- Type declarations are now **generated from the source** rather than
+  hand-maintained, so they cannot drift from the implementation. Declaration
+  maps ship too, so "go to definition" lands on the real `.tsx`.
+- `TextFieldProps` and `DateLikeWithMessage` are exported alongside the
+  existing `DatePickerProps` and `DateLike`.
+- `excludeDates` now accepts react-datepicker's annotated
+  `{ date, message }` form as well as plain dates.
+
+### Changed
+
+- Range and multi-date selection are explicitly unsupported in the types.
+  react-datepicker models its props as a three-way union whose `onChange`
+  differs per variant; this wrapper pins the single-date variant, so
+  `selectsRange` / `selectsMultiple` are now compile errors rather than
+  silently changing what `onChange` receives.
+- `showMonthYearDropdown` and `withPortal` are no longer passed as `false`.
+  react-datepicker types them as `true | never`, so "off" is the absence of
+  the prop. Behaviour is unchanged - both already defaulted to off.
+- Dropped `vitest-axe`, which augments a legacy Vitest global namespace that
+  Vitest 4 no longer uses, so its matcher never type-checked. The unit tests
+  call `axe-core` directly and assert on violation ids, which also makes
+  failures name the offending rule.
+
 ## 1.0.0
 
 First release that installs on modern React. 0.1.x could not be used with

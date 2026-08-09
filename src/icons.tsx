@@ -1,3 +1,5 @@
+import type { SVGProps } from "react";
+
 /**
  * Icons vendored from @hig/icons so the package no longer depends on the
  * deprecated @hig/icon wrapper, which rendered SVG markup through
@@ -6,8 +8,9 @@
  * Both icons are decorative: the accessible name lives on the control that
  * owns them, so they are hidden from assistive technology.
  */
+export type IconProps = SVGProps<SVGSVGElement>;
 
-export function CalendarIcon(props) {
+export function CalendarIcon(props: IconProps) {
   return (
     <svg
       aria-hidden="true"
@@ -31,7 +34,7 @@ export function CalendarIcon(props) {
   );
 }
 
-export function ClearIcon(props) {
+export function ClearIcon(props: IconProps) {
   return (
     <svg
       aria-hidden="true"

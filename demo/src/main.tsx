@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { createRoot } from "react-dom/client";
-import DatePicker from "../../src/index.js";
+import DatePicker from "../../src/index";
 import "../../src/styles/datePicker.scss";
 
 function Demo() {
-  const [startDate, setStartDate] = useState(null);
-  const [rangeStart, setRangeStart] = useState(null);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [rangeStart, setRangeStart] = useState<Date | null>(null);
 
   return (
     <main style={{ fontFamily: "sans-serif", margin: "2rem", maxWidth: 640 }}>
@@ -44,4 +44,7 @@ function Demo() {
   );
 }
 
-createRoot(document.querySelector("#demo")).render(<Demo />);
+const container = document.querySelector("#demo");
+if (!container) throw new Error("#demo container missing from demo/index.html");
+
+createRoot(container).render(<Demo />);
