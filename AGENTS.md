@@ -143,6 +143,14 @@ referenced via `raw.githubusercontent.com`. They are also not in the tarball -
 re-renders the README only on publish, so a docs-only change still needs a
 version bump to appear on the package page.
 
+**CI does not diff the screenshots.** Font rasterisation differs between macOS
+and Linux, so comparing committed PNGs against freshly captured ones would fail
+every run. The `docs-images` job instead re-runs the generator (proving it works
+and that no two shots are identical) and fails when `src/styles/**` changed
+without `docs/images/**`. Add `[skip-images]` to the commit message for style
+edits with no visual effect. The animated GIF is not regenerated in CI - it
+needs ffmpeg and takes too long - so remember it when the look changes.
+
 **axe's colour-contrast rule is disabled in the jsdom tests** because jsdom has
 no canvas to sample. Contrast is only genuinely measured by `npm run test:e2e`
 in real Chromium. A green unit run is not evidence that contrast is fine.

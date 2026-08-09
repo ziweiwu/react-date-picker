@@ -50,6 +50,10 @@ count went from 23 unit / 7 browser to 35 unit / 9 browser.
 
 ## 1.1.1
 
+**Never published to npm.** The publish was blocked by a two-factor prompt, and
+these changes shipped as part of 1.2.0 instead. The registry goes 1.1.0 ->
+1.2.0.
+
 Documentation only. No code changes - the published JavaScript, CSS and type
 declarations are byte-identical to 1.1.0.
 

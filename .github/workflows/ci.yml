@@ -61,6 +61,62 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
+  # Keeps the README images honest. Deliberately does NOT diff the committed
+  # PNGs against freshly captured ones: font rasterisation differs between
+  # macOS (where they are generated) and Linux, so a byte comparison would fail
+  # on every run regardless of whether anything actually changed.
+  docs-images:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: npm
+
+      - run: npm ci
+
+      # Run before regenerating anything, while the tree still matches the commit.
+      - name: Flag stylesheet changes that skipped the screenshots
+        run: |
+          BASE="${{ github.event.pull_request.base.sha || github.event.before }}"
+          if [ -z "$BASE" ] || [ "$BASE" = "0000000000000000000000000000000000000000" ] \
+             || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
+            echo "No usable base commit to diff against; skipping."
+            exit 0
+          fi
+
+          CHANGED="$(git diff --name-only "$BASE" HEAD)"
+          echo "$CHANGED" | sed 's/^/  /'
+
+          if ! echo "$CHANGED" | grep -q '^src/styles/'; then
+            echo "Stylesheet untouched; nothing to check."
+            exit 0
+          fi
+          if echo "$CHANGED" | grep -q '^docs/images/'; then
+            echo "Stylesheet and images both updated."
+            exit 0
+          fi
+          # Escape hatch for style edits with no visual effect (renames, comments).
+          if git log --format=%B "$BASE"..HEAD | grep -qF '[skip-images]'; then
+            echo "Opted out via [skip-images]."
+            exit 0
+          fi
+
+          echo "::error::src/styles changed but docs/images did not. The README"                "screenshots may now misrepresent the component. Run"                "'npm run screenshots' (and 'npm run demo:gif' if the animation is"                "affected) and commit the result, or add [skip-images] to the commit"                "message if the change has no visual effect."
+          exit 1
+
+      - run: npx playwright install --with-deps chromium
+
+      # Proves the capture script still works and that no two shots came out
+      # identical - the guard that caught a "focus" image which was a copy of
+      # the unfocused one.
+      - name: Screenshot generator still produces distinct images
+        run: npm run screenshots
+
   # The published package must install cleanly for consumers on every
   # supported React major, which is exactly what 0.x could not do.
   peer-compat:
