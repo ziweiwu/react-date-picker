@@ -39,6 +39,18 @@ build step in the loop.
   `css/datePicker.css`.
 - `npm run clean` deletes build output.
 
+## Screenshots
+
+`npm run screenshots` regenerates the images in `docs/images/` that the README
+embeds. It serves `demo/screenshots.html`, freezes the browser clock and every
+date on the page, then captures each labelled region, so re-running it produces
+identical images rather than drifting with the current month. Regenerate them
+whenever the component's appearance changes, and commit the result.
+
+The README references those images by absolute `raw.githubusercontent.com` URL
+rather than relative path, because npm serves the README from its own domain
+and cannot resolve repository-relative links.
+
 ## Conventions
 
 - The component must stay installable on React 18 and 19. Adding a runtime

@@ -21,6 +21,7 @@ npm run typecheck  # type-checks src, tests, e2e, demo and configs
 npm run build      # -> es/ (ESM), lib/ (CJS), css/datePicker.css
 npm run audit      # runtime deps only; must be 0 before any release
 npm run check:package  # asserts the tarball npm would publish is usable
+npm run screenshots    # regenerate docs/images/ embedded in the README
 ```
 
 ## Invariants
@@ -114,6 +115,13 @@ overwrites anything set directly.
 mark module type. Without them Node parses `es/index.js` as CommonJS and throws
 on the first `export`. Never add a top-level `"type"` field to the root
 `package.json` — it would mislabel the CJS build.
+
+**README images are absolute URLs on purpose.** npm serves the README from its
+own domain and cannot resolve repository-relative paths, so `docs/images/*` is
+referenced via `raw.githubusercontent.com`. They are also not in the tarball -
+`files` excludes `docs/`, and shipping them would only pad the download. npm
+re-renders the README only on publish, so a docs-only change still needs a
+version bump to appear on the package page.
 
 **axe's colour-contrast rule is disabled in the jsdom tests** because jsdom has
 no canvas to sample. Contrast is only genuinely measured by `npm run test:e2e`

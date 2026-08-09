@@ -3,6 +3,21 @@
 All notable changes to this project are documented here. This project follows
 [Semantic Versioning](https://semver.org/).
 
+## 1.1.1
+
+Documentation only. No code changes - the published JavaScript, CSS and type
+declarations are byte-identical to 1.1.0.
+
+- The README now shows what the component looks like: a hero screenshot of the
+  open calendar plus a gallery covering the empty, filled, keyboard-focused,
+  helper-text, disabled and hover states. Images are referenced by absolute URL
+  so they render on npm as well as GitHub.
+- `npm run screenshots` regenerates those images. It freezes the browser clock
+  and fixes every date on the capture page, so re-running it produces identical
+  output instead of drifting with the current month.
+- Added a Sponsor button to the repository (`.github/FUNDING.yml`) and badges
+  for npm, CI, licence and sponsorship to the README.
+
 ## 1.1.0
 
 Rewritten in TypeScript. No runtime behaviour changed; every test from 1.0.0
