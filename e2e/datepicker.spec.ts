@@ -76,6 +76,27 @@ test("clear button resets the value", async ({ page }) => {
   await expect(input).toHaveValue("");
 });
 
+test("clicking the calendar icon opens the calendar", async ({ page }) => {
+  // INVARIANTS.md 2.5. jsdom forwards label clicks generously, so this is
+  // verified against a real browser as well.
+  await page.locator(".hig__text-field-v1__icon").first().click();
+  await expect(page.locator(".react-datepicker")).toBeVisible();
+  await expect(page.getByLabel("Select a date")).toBeFocused();
+});
+
+test("clearing keeps focus on the field", async ({ page }) => {
+  // INVARIANTS.md 4.4 - the clear button unmounts itself, so focus must not
+  // fall through to <body>.
+  const input = page.getByLabel("Select a date");
+  await input.click();
+  await page.locator(".react-datepicker__day--015").first().click();
+  await expect(input).not.toHaveValue("");
+
+  await page.getByRole("button", { name: /clear date/i }).click();
+  await expect(input).toHaveValue("");
+  await expect(input).toBeFocused();
+});
+
 test("keeps the HIG visual invariants", async ({ page }) => {
   const input = page.getByLabel("Select a date");
   await input.click();

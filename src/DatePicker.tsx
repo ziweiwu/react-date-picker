@@ -2,9 +2,7 @@ import {
   forwardRef,
   useCallback,
   useId,
-  useImperativeHandle,
   useMemo,
-  useRef,
   type SyntheticEvent,
 } from "react";
 import ReactDatePicker, {
@@ -32,8 +30,24 @@ function hasToDate(value: object): value is { toDate(): Date } {
   return typeof (value as { toDate?: unknown }).toDate === "function";
 }
 
+/**
+ * Distinguish react-datepicker's annotated `{ date, message }` form from a
+ * date-like object.
+ *
+ * A bare `"date" in value` test is not enough: moment and dayjs instances both
+ * expose a `date()` accessor, so they matched it and were then read as
+ * annotations, producing `new Date(fn)` - an Invalid Date - and silently
+ * vanishing from `excludeDates`. An annotation has a `date` *value* and no
+ * `toDate()` method.
+ */
 function isDateLikeWithMessage(value: unknown): value is DateLikeWithMessage {
-  return typeof value === "object" && value !== null && "date" in value;
+  if (typeof value !== "object" || value === null) return false;
+  if (value instanceof Date) return false;
+
+  const candidate = value as { date?: unknown; toDate?: unknown };
+  if (typeof candidate.toDate === "function") return false;
+
+  return "date" in candidate && typeof candidate.date !== "function";
 }
 
 /**
@@ -57,11 +71,20 @@ export function toDate(
   value: DateLike | null | undefined,
 ): Date | null | undefined {
   if (value === null || value === undefined) return value;
-  if (value instanceof Date) return value;
-  if (typeof value === "object" && hasToDate(value)) return value.toDate();
 
-  const parsed = new Date(value);
-  return Number.isNaN(parsed.getTime()) ? null : parsed;
+  const parsed =
+    value instanceof Date
+      ? value
+      : typeof value === "object" && hasToDate(value)
+        ? value.toDate()
+        : new Date(value);
+
+  // Validate every path, not just the string/number one. A caller-supplied
+  // `new Date("nonsense")`, or a moment whose `toDate()` is invalid, must be
+  // rejected rather than reaching react-datepicker as an Invalid Date.
+  return parsed instanceof Date && !Number.isNaN(parsed.getTime())
+    ? parsed
+    : null;
 }
 
 /** Coerce a list of date-likes, dropping anything unparseable. */
@@ -213,12 +236,8 @@ const DatePicker = forwardRef<ReactDatePicker, DatePickerProps>(
     },
     ref,
   ) {
-    const instanceRef = useRef<ReactDatePicker>(null);
     const fallbackId = useId();
     const inputId = id ?? fallbackId;
-
-    // Expose the underlying react-datepicker instance, as the 0.x release did.
-    useImperativeHandle(ref, () => instanceRef.current as ReactDatePicker, []);
 
     const handleClear = useCallback(
       (event: SyntheticEvent) => {
@@ -230,6 +249,9 @@ const DatePicker = forwardRef<ReactDatePicker, DatePickerProps>(
     const customInput = useMemo(
       () => (
         <TextField
+          // `showLabel` controls presentation only. When the text is hidden the
+          // name has to survive for assistive technology.
+          aria-label={!showLabel && label ? label : undefined}
           clearButtonTitle={clearButtonTitle}
           focused={focused}
           icon={showIcon ? <CalendarIcon /> : undefined}
@@ -279,7 +301,7 @@ const DatePicker = forwardRef<ReactDatePicker, DatePickerProps>(
         // v9 it also suppresses opening the calendar. The input is marked
         // read-only inside TextField instead, so typing stays disabled while
         // the field remains focusable and the calendar still opens.
-        ref={instanceRef}
+        ref={ref}
         selected={toDate(selected)}
         shouldCloseOnSelect={closeOnSelect}
         // `showMonthYearDropdown` and `withPortal` are omitted rather than set

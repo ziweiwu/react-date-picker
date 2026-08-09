@@ -22,9 +22,16 @@ npm run build      # -> es/ (ESM), lib/ (CJS), css/datePicker.css
 npm run audit      # runtime deps only; must be 0 before any release
 npm run check:package  # asserts the tarball npm would publish is usable
 npm run screenshots    # regenerate docs/images/ embedded in the README
+npm run demo:gif       # re-record docs/images/demo.gif; needs ffmpeg on PATH
 ```
 
 ## Invariants
+
+`INVARIANTS.md` is the behavioural specification - what the component does,
+statement by statement, each tagged with where it is enforced. Read it before
+changing component behaviour, and update it in the same commit. The short list
+below is the subset that has already been shipped broken once.
+
 
 Breaking any of these reintroduces a bug that was already shipped once. All are
 covered by an automated check; if you change the behaviour deliberately, change
@@ -115,6 +122,19 @@ overwrites anything set directly.
 mark module type. Without them Node parses `es/index.js` as CommonJS and throws
 on the first `export`. Never add a top-level `"type"` field to the root
 `package.json` — it would mislabel the CJS build.
+
+**The demo GIF's leading `ArrowDown` is load-bearing.** While focus is on the
+input, react-datepicker only handles ArrowUp/ArrowDown - they are what move
+focus into the day grid. ArrowLeft/ArrowRight pressed first are silently
+dropped, so a recording that opens with them shows four key presses moving the
+cursor one day. `scripts/demo-gif.mjs` waits for
+`.react-datepicker__day--keyboard-selected:focus` before the rest of the walk.
+
+**The GIF records the viewport, so `demo/demo-capture.html` is the crop.** It
+uses `page.clock.setFixedTime`, not `clock.install` - installing the fake clock
+freezes rAF and the CSS transitions the recording exists to show. The blank
+frames before React mounts are measured and trimmed off the head at encode
+time.
 
 **README images are absolute URLs on purpose.** npm serves the README from its
 own domain and cannot resolve repository-relative paths, so `docs/images/*` is

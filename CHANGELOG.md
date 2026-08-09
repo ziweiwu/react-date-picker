@@ -3,6 +3,44 @@
 All notable changes to this project are documented here. This project follows
 [Semantic Versioning](https://semver.org/).
 
+## 1.2.0
+
+Adds `INVARIANTS.md`, a behavioural specification of what the component is
+expected to do, with each statement tagged by where it is enforced. Auditing
+the implementation against it turned up six violations, all fixed here. Test
+count went from 23 unit / 7 browser to 35 unit / 9 browser.
+
+### Fixed
+
+- **`excludeDates` silently discarded moment and dayjs values.** The guard that
+  recognises react-datepicker's annotated `{ date, message }` form tested
+  `"date" in value`, and both libraries expose a `date()` *method*. Matching
+  entries were then read as annotations, produced an `Invalid Date`, and were
+  dropped - so days the caller meant to block stayed selectable. Silent, and it
+  loosened a restriction.
+- **Clicking the calendar icon did nothing.** Vendoring the HIG text field
+  replaced its `<label htmlFor>` wrapper with a `<span>`, so the click no longer
+  reached the input. Restored; the icon opens the calendar again.
+- **Focus was stranded after clearing.** The clear button unmounts with the
+  value it clears, dropping focus to `<body>`. Focus now returns to the input.
+- **An `Invalid Date` passed straight through.** `toDate` validated only the
+  string and number paths, so `selected={new Date("nonsense")}` reached
+  react-datepicker instead of rendering an empty field. All paths are validated
+  now.
+- **`showLabel={false}` removed the accessible name.** It is meant to hide the
+  label visually, not strip the input's name; the text is now applied as
+  `aria-label`.
+- **The forwarded ref was a mount-time snapshot** taken through
+  `useImperativeHandle` with a cast that hid a possible `null`. The caller's ref
+  is forwarded directly, so it always tracks the live instance.
+
+### Changed
+
+- Clearing now leaves the calendar open, because focus returns to the field and
+  react-datepicker opens on focus. An earlier draft of the spec asserted the
+  opposite; keeping focus is the accessibility requirement, so the spec was
+  corrected to match. See INVARIANTS.md 4.4 and 4.5.
+
 ## 1.1.1
 
 Documentation only. No code changes - the published JavaScript, CSS and type

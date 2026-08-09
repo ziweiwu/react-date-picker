@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { createRef, useState } from "react";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axe from "axe-core";
 import { describe, expect, it, vi } from "vitest";
 import DatePicker from "./index.js";
+import type ReactDatePickerInstance from "react-datepicker";
 import type { DateLike } from "./index.js";
 
 const SEPT_15 = new Date(2017, 8, 15);
@@ -27,9 +28,19 @@ async function axeViolations(container: HTMLElement): Promise<string[]> {
   return violations.map((v) => `${v.id}: ${v.help}`);
 }
 
-/** Minimal stand-in for a moment/dayjs instance. */
+/**
+ * Stand-in for a moment/dayjs instance.
+ *
+ * Both libraries expose a `date()` accessor alongside `toDate()`, and that
+ * combination is what previously confused the `excludeDates` annotation
+ * guard, so the mock must carry both.
+ */
 function momentLike(date: Date): DateLike {
-  return { toDate: () => date };
+  return {
+    toDate: () => date,
+    date: () => date.getDate(),
+    format: () => date.toISOString(),
+  } as unknown as DateLike;
 }
 
 describe("DatePicker", () => {
@@ -256,6 +267,153 @@ describe("DatePicker", () => {
     });
   });
 
+  // Each case below maps to a numbered invariant in INVARIANTS.md.
+  describe("invariants", () => {
+    it("1.3 excludes moment-like dates instead of silently ignoring them", async () => {
+      // A moment/dayjs instance has a `date()` method, which the annotation
+      // guard used to mistake for the `{ date, message }` form, dropping every
+      // entry and leaving supposedly-blocked days selectable.
+      render(
+        <DatePicker
+          excludeDates={[momentLike(new Date(2017, 8, 20))]}
+          label="Date"
+          selected={SEPT_15}
+        />,
+      );
+
+      await userEvent.click(getInput());
+      const dialog = await screen.findByRole("dialog");
+      const excluded = within(dialog).getByRole("gridcell", {
+        name: /September 20th, 2017/i,
+      });
+      expect(excluded).toHaveAttribute("aria-disabled", "true");
+    });
+
+    it("1.3 still honours the annotated { date, message } form", async () => {
+      render(
+        <DatePicker
+          excludeDates={[{ date: new Date(2017, 8, 20), message: "Closed" }]}
+          label="Date"
+          selected={SEPT_15}
+        />,
+      );
+
+      await userEvent.click(getInput());
+      const dialog = await screen.findByRole("dialog");
+      expect(
+        within(dialog).getByRole("gridcell", { name: /September 20th, 2017/i }),
+      ).toHaveAttribute("aria-disabled", "true");
+    });
+
+    it("1.2 renders an empty field for an Invalid Date object", () => {
+      render(<DatePicker label="Date" selected={new Date("nonsense")} />);
+      expect(getInput()).toHaveValue("");
+    });
+
+    it("1.2 renders an empty field when toDate() yields an invalid date", () => {
+      render(<DatePicker label="Date" selected={momentLike(new Date(NaN))} />);
+      expect(getInput()).toHaveValue("");
+    });
+
+    it("2.5 opens the calendar when the calendar icon is clicked", async () => {
+      const { container } = render(<DatePicker label="Date" selected={SEPT_15} />);
+      const icon = container.querySelector(".hig__text-field-v1__icon");
+      expect(icon).toBeInTheDocument();
+
+      await userEvent.click(icon as Element);
+      expect(await screen.findByRole("dialog")).toBeInTheDocument();
+    });
+
+    it("4.5 moves focus to the input after clearing", async () => {
+      function Controlled() {
+        const [date, setDate] = useState<Date | null>(SEPT_15);
+        return (
+          <DatePicker
+            label="Date"
+            onChange={setDate}
+            selected={date}
+            showClearButton
+          />
+        );
+      }
+      render(<Controlled />);
+
+      const clear = screen.getByRole("button", { name: /clear date/i });
+      clear.focus();
+      await userEvent.click(clear);
+
+      // The button unmounts with the value, so focus must be handed back to
+      // the input rather than falling through to <body>.
+      expect(getInput()).toHaveFocus();
+      expect(document.body).not.toHaveFocus();
+    });
+
+    it("4.5 opens the calendar after clearing, as a consequence of refocusing", async () => {
+      function Controlled() {
+        const [date, setDate] = useState<Date | null>(SEPT_15);
+        return (
+          <DatePicker
+            label="Date"
+            onChange={setDate}
+            selected={date}
+            showClearButton
+          />
+        );
+      }
+      render(<Controlled />);
+
+      await userEvent.click(
+        screen.getByRole("button", { name: /clear date/i }),
+      );
+
+      expect(getInput()).toHaveValue("");
+      expect(getInput()).toHaveFocus();
+      // Documented in INVARIANTS.md 4.5: keeping focus is the accessibility
+      // requirement, and react-datepicker opens whenever the field is focused.
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+    });
+
+    it("5.2 keeps an accessible name when the label is visually hidden", () => {
+      render(<DatePicker label="Departure date" showLabel={false} />);
+      expect(screen.getByRole("textbox")).toHaveAccessibleName(
+        "Departure date",
+      );
+    });
+
+    it("3.6 never renders month/year dropdowns or the time picker", async () => {
+      const { container } = render(<DatePicker label="Date" selected={SEPT_15} />);
+      await userEvent.click(getInput());
+      await screen.findByRole("dialog");
+
+      for (const selector of [
+        ".react-datepicker__month-dropdown-container",
+        ".react-datepicker__year-dropdown-container",
+        ".react-datepicker__month-year-dropdown-container",
+        ".react-datepicker__time-container",
+      ]) {
+        expect(container.querySelector(selector)).toBeNull();
+      }
+    });
+
+    it("6.5 renders on the server without touching browser APIs", async () => {
+      // Guards against a browser-only side effect creeping into the module
+      // graph, which would break SSR consumers at import time.
+      const { renderToString } = await import("react-dom/server");
+      const html = renderToString(
+        <DatePicker instruction="Pick" label="Date" selected={SEPT_15} showInstruction />,
+      );
+      expect(html).toContain("hig__text-field-v1");
+      expect(html).toContain("09/15/2017");
+    });
+
+    it("6.4 forwards a ref to the live react-datepicker instance", () => {
+      const ref = createRef<ReactDatePickerInstance>();
+      render(<DatePicker label="Date" ref={ref} selected={SEPT_15} />);
+      expect(ref.current).not.toBeNull();
+      expect(typeof ref.current?.setOpen).toBe("function");
+    });
+  });
+
   describe("axe", () => {
     it("has no violations when closed", async () => {
       const { container } = render(
@@ -266,6 +424,15 @@ describe("DatePicker", () => {
           showClearButton
           showInstruction
         />,
+      );
+      expect(await axeViolations(container)).toEqual([]);
+    });
+
+    it("has no violations with the label visually hidden", async () => {
+      // New code path: the icon's <label> is then the only label element and
+      // carries no text, with the name supplied via aria-label.
+      const { container } = render(
+        <DatePicker label="Departure date" selected={SEPT_15} showLabel={false} />,
       );
       expect(await axeViolations(container)).toEqual([]);
     });

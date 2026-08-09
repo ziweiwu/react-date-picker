@@ -2,6 +2,7 @@ import {
   forwardRef,
   useCallback,
   useId,
+  useRef,
   useState,
   type FocusEvent,
   type InputHTMLAttributes,
@@ -86,6 +87,28 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
     const fallbackId = useId();
     const inputId = id ?? fallbackId;
 
+    // react-datepicker owns the forwarded ref (it focuses the input through
+    // it), so keep a local handle alongside rather than replacing it.
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const attachInput = useCallback(
+      (node: HTMLInputElement | null) => {
+        inputRef.current = node;
+        if (typeof ref === "function") ref(node);
+        else if (ref) ref.current = node;
+      },
+      [ref],
+    );
+
+    const handleClear = useCallback(
+      (event: MouseEvent<HTMLButtonElement>) => {
+        onClearButtonClick?.(event);
+        // The button unmounts with the value it clears, so focus would
+        // otherwise fall through to <body> and strand keyboard users.
+        inputRef.current?.focus();
+      },
+      [onClearButtonClick],
+    );
+
     // `focused` is an optional controlled override, matching the original API.
     const isFocused = focused !== undefined ? focused : selfFocused;
 
@@ -160,13 +183,18 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
             )}
             <div className="hig__text-field-v1__input-row">
               {icon && (
-                <span
+                // A <label>, not a <span>: clicking the icon must focus the
+                // input and open the calendar, as it did before this component
+                // was vendored. The SVG is aria-hidden, so this label
+                // contributes no text and the accessible name is unchanged.
+                <label
                   className={clsx("hig__text-field-v1__icon", {
                     "hig__text-field-v1__icon--disabled": disabled,
                   })}
+                  htmlFor={inputId}
                 >
                   {icon}
-                </span>
+                </label>
               )}
               <input
                 {...inputProps}
@@ -182,7 +210,7 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
                 onBlur={handleBlur}
                 onFocus={handleFocus}
                 readOnly
-                ref={ref}
+                ref={attachInput}
                 required={required ? true : undefined}
                 type={type}
                 value={value ?? ""}
@@ -191,7 +219,7 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
                 <span className="hig__text-field-v1__clear">
                   <button
                     className="hig__icon-button hig__icon-button--transparent"
-                    onClick={onClearButtonClick}
+                    onClick={handleClear}
                     title={clearButtonTitle}
                     type="button"
                   >

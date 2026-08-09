@@ -1,6 +1,6 @@
 {
   "name": "react-hig-datepicker",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "An accessible date picker React component styled with the Autodesk HIG design language",
   "keywords": [
     "react",
@@ -67,7 +67,8 @@
     "prepublishOnly": "npm run lint && npm run test && npm run build && npm run check:package",
     "test:e2e": "playwright test",
     "check:package": "node scripts/check-package.mjs",
-    "screenshots": "node scripts/screenshots.mjs"
+    "screenshots": "node scripts/screenshots.mjs",
+    "demo:gif": "node scripts/demo-gif.mjs"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
