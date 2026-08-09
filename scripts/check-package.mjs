@@ -55,7 +55,8 @@ for (const file of required) {
 
 for (const { label, re } of forbidden) {
   const hits = paths.filter((p) => re.test(p));
-  if (hits.length) problems.push(`${label} should not ship: ${hits.join(", ")}`);
+  if (hits.length)
+    problems.push(`${label} should not ship: ${hits.join(", ")}`);
 }
 
 // The CSS must actually contain rules; an empty file would satisfy the

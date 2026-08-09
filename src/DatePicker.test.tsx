@@ -92,11 +92,7 @@ describe("DatePicker", () => {
 
     it("links instructions to the input via aria-describedby", () => {
       render(
-        <DatePicker
-          instruction="Choose a date"
-          label="Date"
-          showInstruction
-        />,
+        <DatePicker instruction="Choose a date" label="Date" showInstruction />,
       );
       expect(getInput()).toHaveAccessibleDescription("Choose a date");
     });
@@ -233,7 +229,9 @@ describe("DatePicker", () => {
 
   describe("options", () => {
     it("hides the calendar icon when showIcon is false", () => {
-      const { container } = render(<DatePicker label="Date" showIcon={false} />);
+      const { container } = render(
+        <DatePicker label="Date" showIcon={false} />,
+      );
       expect(container.querySelector(".hig__icon--calendar")).toBeNull();
     });
 
@@ -261,7 +259,12 @@ describe("DatePicker", () => {
         />,
       );
       const input = getInput();
-      for (const attr of ["calender", "showlabel", "showinstruction", "instruction"]) {
+      for (const attr of [
+        "calender",
+        "showlabel",
+        "showinstruction",
+        "instruction",
+      ]) {
         expect(input).not.toHaveAttribute(attr);
       }
     });
@@ -316,7 +319,9 @@ describe("DatePicker", () => {
     });
 
     it("2.5 opens the calendar when the calendar icon is clicked", async () => {
-      const { container } = render(<DatePicker label="Date" selected={SEPT_15} />);
+      const { container } = render(
+        <DatePicker label="Date" selected={SEPT_15} />,
+      );
       const icon = container.querySelector(".hig__text-field-v1__icon");
       expect(icon).toBeInTheDocument();
 
@@ -381,7 +386,9 @@ describe("DatePicker", () => {
     });
 
     it("3.6 never renders month/year dropdowns or the time picker", async () => {
-      const { container } = render(<DatePicker label="Date" selected={SEPT_15} />);
+      const { container } = render(
+        <DatePicker label="Date" selected={SEPT_15} />,
+      );
       await userEvent.click(getInput());
       await screen.findByRole("dialog");
 
@@ -400,7 +407,12 @@ describe("DatePicker", () => {
       // graph, which would break SSR consumers at import time.
       const { renderToString } = await import("react-dom/server");
       const html = renderToString(
-        <DatePicker instruction="Pick" label="Date" selected={SEPT_15} showInstruction />,
+        <DatePicker
+          instruction="Pick"
+          label="Date"
+          selected={SEPT_15}
+          showInstruction
+        />,
       );
       expect(html).toContain("hig__text-field-v1");
       expect(html).toContain("09/15/2017");
@@ -432,7 +444,11 @@ describe("DatePicker", () => {
       // New code path: the icon's <label> is then the only label element and
       // carries no text, with the name supplied via aria-label.
       const { container } = render(
-        <DatePicker label="Departure date" selected={SEPT_15} showLabel={false} />,
+        <DatePicker
+          label="Departure date"
+          selected={SEPT_15}
+          showLabel={false}
+        />,
       );
       expect(await axeViolations(container)).toEqual([]);
     });

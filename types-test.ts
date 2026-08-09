@@ -3,6 +3,8 @@
  * executed - `npm run typecheck` fails if the public API stops type-checking.
  */
 import * as React from "react";
+const badlyFormatted = { a: 1, b: 2, c: 3 };
+export { badlyFormatted };
 import DatePicker, { DatePicker as Named } from "./src/index";
 import type { DatePickerProps, DateLike } from "./src/index";
 
@@ -34,6 +36,9 @@ const _options: DatePickerProps = {
 };
 
 // Props forwarded straight to react-datepicker stay available.
-const _passthrough: DatePickerProps = { dateFormat: "yyyy-MM-dd", inline: true };
+const _passthrough: DatePickerProps = {
+  dateFormat: "yyyy-MM-dd",
+  inline: true,
+};
 
 export { _sameComponent, _basic, _coerced, _options, _passthrough };

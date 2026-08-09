@@ -16,7 +16,10 @@
   $datepicker__day-margin: 0.166rem,
   // Parenthesised so the comma is part of the font stack, not an
   // argument separator in the `with (...)` configuration.
-  $datepicker__font-family: (ArtifaktElement, sans-serif),
+  $datepicker__font-family: (
+      ArtifaktElement,
+      sans-serif,
+    ),
   $datepicker__font-size: 14px,
   $datepicker__header-color: #222934,
   $datepicker__highlighted-color: #87bc40,
@@ -72,7 +75,9 @@
   }
 
   // Today's date reads as HIG blue and bold unless another state applies.
-  &--today:not(&--selected):not(:hover):not(&--disabled):not(&--in-range):not(&--in-selecting-range):not(&--keyboard-selected) {
+  &--today:not(&--selected):not(:hover):not(&--disabled):not(&--in-range):not(
+      &--in-selecting-range
+    ):not(&--keyboard-selected) {
     color: $hig-blue-accessible;
     font-weight: bold;
   }

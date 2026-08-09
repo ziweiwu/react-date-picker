@@ -1,0 +1,18 @@
+# Build output
+lib/
+es/
+css/
+types/
+demo/dist/
+
+# Generated or binary
+package-lock.json
+docs/images/
+coverage/
+playwright-report/
+test-results/
+
+# Prose. Prettier pads markdown table cells to align them, which with long
+# image URLs produces unreadable multi-hundred-character lines and a huge diff
+# for no benefit. Docs are hand-wrapped instead.
+*.md
