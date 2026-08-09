@@ -37,7 +37,7 @@ const workDir = mkdtempSync(resolve(tmpdir(), "hig-datepicker-demo-"));
 
 const server = spawn(
   "npx",
-  ["vite", "--config", "vite.demo.config.ts", "--host", "127.0.0.1", "--port", String(PORT), "--strictPort"],
+  ["vite", "--config", "vite.demo.config.mts", "--host", "127.0.0.1", "--port", String(PORT), "--strictPort"],
   { cwd: root, stdio: "ignore" },
 );
 const shutdown = () => server.kill();

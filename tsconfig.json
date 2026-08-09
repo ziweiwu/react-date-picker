@@ -29,7 +29,7 @@
     "src",
     "e2e",
     "demo/src",
-    "*.config.ts",
+    "*.config.ts", "*.config.mts",
     "vitest.setup.ts",
     "types-test.ts"
   ]
