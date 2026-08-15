@@ -1,0 +1,48 @@
+name: Storybook
+
+# Publishes the Storybook to GitHub Pages so the README (and therefore the npm
+# package page) can link to something people can actually click and try.
+#
+# Deploys only from master: a Pages site is public, so a branch build must not
+# be able to overwrite what the README points at.
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A queued run should not race a running one, but let the in-flight deploy
+# finish rather than cancelling it half-published.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22.x
+          cache: npm
+      - run: npm ci
+      - run: npm run storybook:build
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: storybook-static
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

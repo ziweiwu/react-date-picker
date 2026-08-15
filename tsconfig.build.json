@@ -10,5 +10,14 @@
     "types": []
   },
   "include": ["src"],
-  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"]
+  "exclude": [
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    // Stories would otherwise emit `DatePicker.stories.d.ts` into `types/`,
+    // which the build copies into both `lib/` and `es/`. That declaration
+    // imports `@storybook/react-vite`, a devDependency consumers do not have,
+    // so their `tsc` would fail on a type they never asked for.
+    "src/**/*.stories.ts",
+    "src/**/*.stories.tsx"
+  ]
 }

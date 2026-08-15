@@ -23,6 +23,8 @@
     "src",
     "e2e",
     "demo/src",
+    ".storybook/**/*.ts",
+    ".storybook/**/*.tsx",
     "*.config.ts",
     "*.config.mts",
     "vitest.setup.ts",
