@@ -65,27 +65,98 @@ on the input line otherwise. **[e2e]**
 **3.1** Clicking the input opens the calendar; so does focusing it with the
 keyboard. **[unit] [e2e]**
 
-**3.2** <kbd>Escape</kbd> closes the calendar. **[unit]**
+**3.2** <kbd>Escape</kbd> closes the calendar and leaves focus on the field, as
+the ARIA combobox pattern expects. **[unit] [e2e]**
 
-> Known deviation: react-datepicker's Escape handler also *blurs* the input.
-> The ARIA combobox pattern expects focus to stay on the field. This is
-> upstream behaviour, not something this wrapper introduces, and working around
-> it would mean fighting react-datepicker's key handling. Recorded here so it
-> is a known gap rather than a surprise.
+> This used to be recorded here as a known deviation: react-datepicker's
+> Escape handler also *blurred* the input. As of react-datepicker 9.1.0 it no
+> longer does, verified in real Chromium. The e2e test pins the better
+> behaviour so an upgrade that reintroduces the blur fails rather than quietly
+> restoring the deviation.
 
-**3.3** The calendar opens below the field, left-aligned with it, and never
-flips above — it shifts to stay in the viewport instead. **[e2e]**
+**3.3** The calendar is placed below the field and left-aligned with it
+whenever there is room. It is always fully inside the viewport vertically, and
+opening it never adds horizontal page scroll at any width — including widths
+too narrow for the field itself, where the page already scrolls sideways
+without it. **[e2e]**
+
+> Below-and-left-aligned is a preference, not a guarantee. react-datepicker
+> composes its floating-ui middleware as
+> `[flip({padding: 15}), offset(10), arrow(...), ...popperModifiers]`, so its
+> own `flip` always runs before anything this wrapper supplies, and its
+> `popperProps` escape hatch is typed `Omit<UseFloatingOptions, "middleware">`
+> so the array cannot be replaced either. When the calendar genuinely does not
+> fit below, it flips above. What *is* guaranteed is that it stays on screen:
+> a `size` middleware caps the calendar to the space available at whichever
+> placement flip settles on. Before that cap existed, a 1280x350 viewport put
+> the calendar at `y = -133`, with the month header and both navigation
+> buttons above the top edge — unreachable, and impossible to scroll to.
+>
+> Horizontally the partner is `shift`, and the two have to agree about the
+> same thing. `size` derives `availableWidth` from the boundary width minus
+> its own padding and knows nothing about where `shift` placed the calendar,
+> so a symmetric inset is wrong either way: 15px on both sides shrank a
+> calendar that already fitted, and 0 on both sides ignored the 15px `shift`
+> had already committed to on the left, leaving a 3px overflow across
+> 261–272px. Reserving the padding on one side alone gives exactly the right
+> budget. The calendar is also `box-sizing: border-box`, or its 1px border
+> would sit outside the cap and put 2px of that overflow straight back.
+>
+> Below 320px the *field* still overflows on its own — its vendored
+> `min-width: 230px` does not fit a 240–260px viewport even with the calendar
+> shut. That width is part of the HIG text-field contract this package
+> reproduces, so it is left alone; 320px, the width WCAG 1.4.10 is written
+> against, is clean.
+
+**3.3.1** Capping the calendar's height makes it a scroll container, so the
+focused day is scrolled back into view as the keyboard cursor moves. **[e2e]**
+
+> react-datepicker focuses day cells with `.focus({ preventScroll: true })`,
+> which switches off the browser's own scroll-into-view. That is invisible
+> until something clips the calendar; once 3.3's cap does, arrow-key
+> navigation walked the cursor straight out of the visible area. A `focusin`
+> listener in `DatePicker.tsx` restores it, and only acts while the calendar
+> is actually overflowing.
 
 **3.4** Picking a day calls `onChange` with that day and, when `closeOnSelect`
 is set (the default), closes the calendar. **[unit]**
 
 **3.5** Arrow keys move between days and <kbd>Enter</kbd> selects. **[e2e]**
 
-**3.6** Month/year dropdowns and the time picker are never shown; this is a
+> Known deviation, upstream: while focus is still on the *input*,
+> react-datepicker only handles <kbd>ArrowUp</kbd>/<kbd>ArrowDown</kbd> — they
+> are what move focus into the day grid. <kbd>ArrowLeft</kbd>,
+> <kbd>ArrowRight</kbd>, <kbd>PageUp</kbd> and <kbd>PageDown</kbd> pressed
+> first are silently dropped, with no visible or announced response, and only
+> start working once the grid has focus. `AGENTS.md` already notes this for
+> `scripts/demo-gif.mjs`; it is user-facing too. Closing it would mean fighting
+> react-datepicker's key handling, exactly as with 3.2's original deviation, so
+> the only lever this component actually owns is `instruction` copy.
+
+**3.6** The month navigation buttons are not in the <kbd>Tab</kbd> sequence.
+Reaching a different month by keyboard is done with the arrow keys, rolling
+over the month boundary. **[none]**
+
+> This is react-datepicker's single-tab-stop grid, and it matches the ARIA
+> Authoring Practices date-picker pattern, so WCAG 2.1.1 is satisfied — every
+> function is keyboard-reachable. Recorded because a sighted keyboard user
+> looking straight at the chevrons has no way to discover that. Listed as a
+> deliberate deviation rather than a bug so it does not get "fixed" into a
+> fight with upstream.
+
+**3.7** Month/year dropdowns and the time picker are never shown; this is a
 day picker. **[unit]**
 
-**3.7** Days outside the displayed month are hidden, and day cells are square
-in every state. **[e2e]**
+**3.8** Days outside the displayed month are hidden, and day cells are square
+in every state. A week row made up entirely of such days is hidden as a row,
+not merely cell by cell. **[e2e]**
+
+> `fixedHeight` pads a five-row month out to six so the calendar's height never
+> changes. Hiding only the cells left that padding row in the accessibility
+> tree as a `role="row"` with no cells in it — a critical
+> `aria-required-children` violation, on 28 of the 36 months in 2025–2027.
+> Whether CI caught it depended entirely on which month it ran in. The row is
+> hidden with `visibility: hidden`, so it still reserves its height.
 
 ## 4. The clear button
 
@@ -126,6 +197,45 @@ indicator. **[e2e]**
 
 **5.6** Colour is never the sole carrier of meaning, and all text meets WCAG AA
 contrast. **[e2e]**
+
+**5.7** Every pointer target is at least 24x24 CSS px, meeting WCAG 2.2 AA
+2.5.8 outright rather than through the spacing exception. **[e2e]**
+
+> Day cells and the clear button are 30x30. The month navigation was 15x15,
+> which passed only because nothing sits within 24px of it; it now carries
+> 5px of padding around an unchanged 15px caret glyph. All colour values live
+> in `src/styles/_tokens.scss` with their measured ratio in a comment — that
+> is what keeps 5.6 checkable, so no colour may be written anywhere else.
+
+**5.8** `errors` renders a validation message, marks the input `aria-invalid`,
+and adds the message to the input's accessible description alongside any
+`instruction`. **[unit]**
+
+> `TextField` had rendered all of this since it was vendored, but no caller
+> could reach it: `errors` is not a react-datepicker prop, so it never arrived
+> through `...rest`. The styling in `_hig-text-field.scss` was dead code.
+>
+> Only the error message carries the error colour and weight. Upstream applied
+> them to `instruction` as well, so a field with both rendered the hint and the
+> error identically, with nothing marking out the one to act on. The error is
+> still *identified* to assistive technology by `aria-invalid`, which is what
+> SC 3.3.1 leans on, so no English "Error:" prefix is prepended to
+> caller-supplied text.
+>
+> A field that is focused *and* in error keeps a 2px underline in the error
+> colour. Both modifiers are single classes, so previously whichever rule came
+> last in the file won and focusing an errored field dropped the underline back
+> to 1px.
+>
+> The demo renders an error fixture purely so the Playwright suite exercises
+> this state in a real browser: jsdom cannot sample pixels, so `$hig-error` had
+> never actually been contrast-checked anywhere.
+>
+> The string form of `required`, which renders a notice line, stays
+> unreachable. react-datepicker's `cloneElement` overwrites `required` on the
+> custom input with its own prop, typed `boolean`, so a string cannot be
+> routed through without lying to the compiler. `TextField` still accepts one,
+> for parity with the `@hig/text-field` API it reproduces.
 
 ## 6. Integration
 

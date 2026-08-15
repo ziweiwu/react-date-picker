@@ -135,6 +135,16 @@
   border-bottom: 1px solid $hig-error;
 }
 
+// Focused *and* in error. Both modifiers are single classes, so without this
+// the one declared later simply won. Source order is not a decision: keep the
+// error colour, which is the more urgent signal, and the focused underline's
+// 2px weight, so focus stays visible on a field that has an error.
+.hig__text-field-v1__input-wrapper--with-errors.hig__text-field-v1__input-wrapper--focused,
+.hig__text-field-v1__input-wrapper--with-errors.hig__text-field-v1__input-wrapper--focused:hover {
+  border-bottom: 2px solid $hig-error;
+  margin-bottom: 9px;
+}
+
 .hig__text-field-v1__input {
   display: block;
   width: 100%;
@@ -218,10 +228,14 @@
   line-height: 14px;
 }
 
-.hig__text-field-v1--with-errors .hig__text-field-v1__instructions {
-  color: $hig-error;
-  font-weight: 600;
-}
+// FIX: upstream restyled the instructions in the error colour and weight too,
+// so with both `instruction` and `errors` set the hint and the error message
+// rendered identically and nothing marked out the one the user had to act on.
+// Only the error message carries the error treatment now; the hint keeps its
+// ordinary styling. The error is still identified to assistive technology by
+// `aria-invalid` on the input, which is what SC 3.3.1 relies on - hence no
+// hardcoded "Error:" prefix, which would only be an untranslated English
+// string in front of caller-supplied text.
 
 .hig__text-field-v1__clear {
   position: absolute;
@@ -246,7 +260,7 @@
   border: 1px solid transparent;
   border-radius: 4px;
   background-color: transparent;
-  color: #3b4454;
+  color: $hig-icon-button;
   cursor: pointer;
 
   &:hover {

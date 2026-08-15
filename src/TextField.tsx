@@ -79,6 +79,9 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
       type = "text",
       value,
       "aria-describedby": ariaDescribedBy,
+      // Destructured so the explicit `aria-invalid` below cannot silently
+      // erase a caller-supplied one when the field has no errors of its own.
+      "aria-invalid": ariaInvalid,
       ...inputProps
     },
     ref,
@@ -199,7 +202,7 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
               <input
                 {...inputProps}
                 aria-describedby={describedBy}
-                aria-invalid={errors ? true : undefined}
+                aria-invalid={errors ? true : ariaInvalid}
                 className={clsx(
                   "hig__text-field-v1__input",
                   inputProps.className,

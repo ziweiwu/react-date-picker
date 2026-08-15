@@ -1,14 +1,16 @@
 import {
   forwardRef,
   useCallback,
+  useEffect,
   useId,
   useMemo,
+  type ReactNode,
   type SyntheticEvent,
 } from "react";
 import ReactDatePicker, {
   type DatePickerProps as ReactDatePickerProps,
 } from "react-datepicker";
-import { offset, shift } from "@floating-ui/react";
+import { shift, size } from "@floating-ui/react";
 import TextField from "./TextField.js";
 import { CalendarIcon } from "./icons.js";
 
@@ -125,12 +127,141 @@ function toExcludeDates(
 }
 
 /**
- * Keep the calendar pinned below the field and nudge it back into the
- * viewport when it would overflow, without ever flipping above the input.
- * This reproduces the popper.js configuration used before react-datepicker 9
- * moved to floating-ui.
+ * Match the padding react-datepicker gives its own `flip`, so this
+ * configuration and that one agree on what "overflows the viewport" means.
+ * If `size` left the calendar taller than `flip` considers safe, the two would
+ * disagree every time `autoUpdate` fires and the popper would oscillate.
  */
-const POPPER_MODIFIERS = [offset(0), shift()];
+const POPPER_PADDING = 15;
+
+/**
+ * Keep the calendar inside the viewport.
+ *
+ * `popperPlacement="bottom-start"` asks for a calendar pinned below the field
+ * and left-aligned with it, and that is what you get whenever there is room.
+ * It is only a preference, though: react-datepicker composes its middleware as
+ * `[flip({padding: 15}), offset(10), arrow(...), ...popperModifiers]`, so its
+ * own `flip` always runs first and nothing passed here can remove it. (Its
+ * `popperProps` escape hatch is typed `Omit<UseFloatingOptions, "middleware">`,
+ * so replacing the array wholesale is deliberately closed off too.) An earlier
+ * comment here claimed this configuration disabled flipping; it never did.
+ *
+ * What actually caused trouble was the calendar being taller than the space
+ * flip had to put it in: on short viewports it was placed at a negative `y`,
+ * leaving the month header and both navigation buttons above the top edge,
+ * unreachable and unscrollable-to. `size` caps the calendar to the room
+ * actually available at whichever placement flip settles on, which keeps it
+ * fully on screen either way - and, because a calendar that fits no longer
+ * overflows, usually lets flip keep the requested `bottom-start`.
+ *
+ * The cap is published as a custom property rather than written straight onto
+ * the popper: the popper also contains the arrow, which is positioned outside
+ * its box and would be clipped by an `overflow` on that element. The
+ * stylesheet applies the value to `.react-datepicker` instead.
+ */
+const POPPER_MODIFIERS = [
+  shift({ padding: POPPER_PADDING }),
+  size({
+    // Vertical padding matches `flip`'s so the two agree (see above).
+    //
+    // Horizontally the partner is `shift`, and the padding is deliberately
+    // lopsided. `size` derives `availableWidth` from the boundary width minus
+    // its own horizontal padding, and knows nothing about where `shift` put
+    // the calendar. `shift` clamps the left edge to `POPPER_PADDING` from the
+    // viewport, so once it has done that the widest the calendar can be
+    // without crossing the *right* edge is `viewport - POPPER_PADDING` —
+    // which is what reserving the padding on one side alone produces.
+    //
+    // Both symmetric choices are wrong. 15 on each side double-counts the
+    // inset and shrank the 258px grid to 252px at a 280px viewport, adding a
+    // scrollbar to a calendar that already fitted. 0 on each side ignores
+    // shift's offset entirely and left a 3px page overflow across 261-272px,
+    // where the field alone caused none.
+    padding: {
+      top: POPPER_PADDING,
+      bottom: POPPER_PADDING,
+      left: 0,
+      right: POPPER_PADDING,
+    },
+    apply({ availableHeight, availableWidth, elements }) {
+      // Width matters as well as height. The day grid has a fixed 258px
+      // natural width, so on a viewport narrower than that the page itself
+      // gained a horizontal scrollbar. Capping the calendar moves that
+      // scrollbar inside the calendar, where it belongs.
+      elements.floating.style.setProperty(
+        "--hig-datepicker-available-height",
+        `${Math.max(0, Math.round(availableHeight))}px`,
+      );
+      elements.floating.style.setProperty(
+        "--hig-datepicker-available-width",
+        `${Math.max(0, Math.round(availableWidth))}px`,
+      );
+    },
+  }),
+];
+
+/**
+ * Keep the keyboard cursor visible inside a calendar that scrolls.
+ *
+ * react-datepicker focuses day cells with `.focus({ preventScroll: true })`
+ * (see `dayEl.current?.focus` in its bundle), which suppresses the browser's
+ * own "scroll the focused element into view". That was harmless while the
+ * calendar was never a scroll container - but the `size` cap above makes it
+ * one whenever the viewport is short, and arrow-key navigation could then move
+ * focus to a day clipped out of sight, leaving a keyboard user with no visible
+ * cursor and no way to tell where they were.
+ *
+ * The listener is on `document` because the popper is rendered as a sibling of
+ * the field wrapper, so this component owns no element that contains it. It is
+ * cheap: anything that is not a day cell inside an actually-overflowing
+ * calendar returns immediately.
+ */
+function handleDayFocusIn(event: FocusEvent) {
+  if (!(event.target instanceof Element)) return;
+
+  const day = event.target.closest(".react-datepicker__day");
+  const calendar = day?.closest(".react-datepicker");
+  if (!day || !calendar) return;
+
+  // Only intervene when the cap is actually biting; otherwise this would
+  // scroll the page for a calendar that is already fully visible.
+  if (
+    calendar.scrollHeight <= calendar.clientHeight &&
+    calendar.scrollWidth <= calendar.clientWidth
+  ) {
+    return;
+  }
+
+  day.scrollIntoView({ block: "nearest", inline: "nearest" });
+}
+
+/**
+ * One listener for the whole page, not one per picker.
+ *
+ * The handler is global by nature - it works entirely from the event target -
+ * so a page with three pickers was running it three times per focus change,
+ * scrolling the same day into view three times. The calls were idempotent, so
+ * nothing was visibly wrong, but the work grows with the number of instances.
+ * Counting mounts keeps a single listener attached for as long as at least one
+ * picker is mounted, and removes it when the last unmounts.
+ */
+let dayFocusSubscribers = 0;
+
+function useVisibleDayFocus() {
+  useEffect(() => {
+    if (dayFocusSubscribers === 0) {
+      document.addEventListener("focusin", handleDayFocusIn);
+    }
+    dayFocusSubscribers += 1;
+
+    return () => {
+      dayFocusSubscribers -= 1;
+      if (dayFocusSubscribers === 0) {
+        document.removeEventListener("focusin", handleDayFocusIn);
+      }
+    };
+  }, []);
+}
 
 /**
  * react-datepicker's props are a three-way union discriminated by
@@ -177,6 +308,21 @@ export interface DatePickerProps extends PassthroughProps {
   closeOnSelect?: boolean;
   disabled?: boolean;
   endDate?: DateLike | null;
+  /**
+   * Validation message shown below the field. Also switches the field to its
+   * error styling and marks the input `aria-invalid`.
+   *
+   * `TextField` has always rendered this, but nothing could reach it: `errors`
+   * is not a react-datepicker prop, so it never arrived through `...rest`.
+   *
+   * Its sibling in `TextField`, the string form of `required` that renders a
+   * notice line, stays unreachable on purpose. react-datepicker's
+   * `cloneElement` overwrites `required` on the custom input with its own
+   * prop, which it types `boolean`, so a string cannot be routed through it
+   * without lying to the compiler. `TextField` keeps accepting one for parity
+   * with the `@hig/text-field` API it vendors.
+   */
+  errors?: ReactNode;
   excludeDates?: readonly (DateLike | DateLikeWithMessage)[];
   fixedHeight?: boolean;
   /** Controlled override for the field's focused styling. */
@@ -218,6 +364,7 @@ const DatePicker = forwardRef<ReactDatePicker, DatePickerProps>(
       closeOnSelect = true,
       disabled = false,
       endDate,
+      errors,
       excludeDates,
       fixedHeight = true,
       focused,
@@ -243,6 +390,8 @@ const DatePicker = forwardRef<ReactDatePicker, DatePickerProps>(
     const fallbackId = useId();
     const inputId = id ?? fallbackId;
 
+    useVisibleDayFocus();
+
     const handleClear = useCallback(
       (event: SyntheticEvent) => {
         onChange?.(null, event);
@@ -257,6 +406,7 @@ const DatePicker = forwardRef<ReactDatePicker, DatePickerProps>(
           // name has to survive for assistive technology.
           aria-label={!showLabel && label ? label : undefined}
           clearButtonTitle={clearButtonTitle}
+          errors={errors}
           focused={focused}
           icon={showIcon ? <CalendarIcon /> : undefined}
           instructions={showInstruction ? instruction : undefined}
@@ -267,6 +417,7 @@ const DatePicker = forwardRef<ReactDatePicker, DatePickerProps>(
       ),
       [
         clearButtonTitle,
+        errors,
         focused,
         handleClear,
         instruction,
