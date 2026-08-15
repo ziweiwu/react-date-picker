@@ -3,12 +3,19 @@
 All notable changes to this project are documented here. This project follows
 [Semantic Versioning](https://semver.org/).
 
-## Unreleased
+## 1.3.0
 
 Four rounds of adversarial UX and QA review against the running demo. Test
 count went from 35 unit / 9 browser to 40 unit / 28 browser.
 
 ### Added
+
+- **An interactive Storybook**, published to
+  [ziweiwu.github.io/react-date-picker](https://ziweiwu.github.io/react-date-picker/)
+  and linked from the README. Eight stories cover the states worth seeing -
+  empty, filled, instruction, error, disabled, `minDate`, hidden label and no
+  icon - built from `src/`, so they exercise the real component. The stories
+  are not in the published tarball.
 
 - **`errors`** renders a validation message, marks the input `aria-invalid` and
   adds the message to the input's accessible description. `TextField` had
