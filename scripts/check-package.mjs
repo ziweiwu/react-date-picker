@@ -40,6 +40,17 @@ const forbidden = [
   { label: "test files", re: /\.test\.[cm]?[jt]sx?$/ },
   { label: "spec files", re: /\.spec\.[cm]?[jt]sx?$/ },
   { label: "snapshots", re: /__snapshots__\// },
+  // `files` ships all of `src`, so a story sitting next to the component would
+  // be published along with it - and it pulls Storybook types in with it.
+  // Matches the emitted `.stories.d.ts` and its map as well as the source
+  // `.stories.tsx`. The declarations are the easier of the two to ship by
+  // accident: they come from `tsconfig.build.json`, not from `files`.
+  {
+    label: "Storybook stories",
+    re: /\.stories\.[cm]?[jt]sx?$|\.stories\.d\.ts(\.map)?$/,
+  },
+  { label: "Storybook config", re: /^\.storybook\// },
+  { label: "Storybook build output", re: /^storybook-static\// },
   { label: "uncompiled CSS in lib/ or es/", re: /^(lib|es)\/.*\.scss$/ },
   { label: "e2e tests", re: /^e2e\// },
   { label: "CI config", re: /^\.github\// },

@@ -24,6 +24,8 @@ npm run check:package  # asserts the tarball npm would publish is usable
 npm run screenshots    # regenerate docs/images/ embedded in the README
 npm run format         # Prettier; a pre-commit hook does this for staged files
 npm run demo:gif       # re-record docs/images/demo.gif; needs ffmpeg on PATH
+npm run storybook      # Storybook at localhost:6006, imports straight from src/
+npm run storybook:build # -> storybook-static/, deployed to GitHub Pages
 ```
 
 ## Invariants
@@ -69,6 +71,29 @@ the check in the same commit rather than deleting it.
    `npm pack` output for required files, forbidden patterns (tests, snapshots,
    `.npmrc`, `.env`) and a non-empty stylesheet. It runs in CI and in
    `prepublishOnly`. Add a rule there whenever a new file type starts shipping.
+
+## Storybook
+
+`src/DatePicker.stories.tsx` is the live documentation, deployed to GitHub Pages
+by `.github/workflows/pages.yml` on every push to master and linked from the
+README badge - which is also the `homepage` npm shows on the package page. If
+that deploy breaks, the link on npm breaks with it.
+
+Two things keep stories out of the tarball, and both are needed:
+
+- `files` carries `!src/**/*.stories.*`, because `files` ships all of `src`.
+- `tsconfig.build.json` excludes them too. Without that, `types/` gets a
+  `DatePicker.stories.d.ts` that the build copies into `lib/` and `es/`, and it
+  `import`s `@storybook/react-vite` - a devDependency consumers do not have, so
+  their `tsc` fails on a type they never asked for. This one is easy to miss:
+  it is not governed by `files` at all, and the source story is nowhere near the
+  published output.
+
+`check:package` asserts both, matching `.stories.d.ts` as well as `.stories.tsx`.
+
+Stories are controlled - each holds `selected` in state and updates it from
+`onChange`. A story passing a bare `selected` looks frozen, which reads as a bug
+in the component rather than in the story (invariant 1.5).
 
 ## Traps
 

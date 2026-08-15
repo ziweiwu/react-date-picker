@@ -14,6 +14,10 @@ export default tseslint.config(
       "css/**",
       "types/**",
       "demo/dist/**",
+      // Storybook's compiled output. Flat config does not read `.gitignore`,
+      // so being ignored by git is not enough - without this, `eslint .` tries
+      // to type-check bundled JS that is in no tsconfig and dies outright.
+      "storybook-static/**",
       "coverage/**",
       "playwright-report/**",
       "test-results/**",

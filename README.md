@@ -3,6 +3,7 @@
 [![npm](https://img.shields.io/npm/v/react-hig-datepicker.svg)](https://www.npmjs.com/package/react-hig-datepicker)
 [![CI](https://github.com/ziweiwu/react-date-picker/actions/workflows/ci.yml/badge.svg)](https://github.com/ziweiwu/react-date-picker/actions/workflows/ci.yml)
 [![license](https://img.shields.io/npm/l/react-hig-datepicker.svg)](./LICENSE)
+[![Storybook](https://img.shields.io/badge/Storybook-live%20demo-ff4785?logo=storybook&logoColor=white)](https://ziweiwu.github.io/react-date-picker/)
 [![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-db61a2?logo=githubsponsors)](https://github.com/sponsors/ziweiwu)
 
 An accessible React date picker styled with the Autodesk HIG design language.
@@ -17,6 +18,14 @@ An accessible React date picker styled with the Autodesk HIG design language.
 
 <p align="center">
   <em>Pointer and keyboard, both fully supported — recorded from the real component.</em>
+</p>
+
+<p align="center">
+  <strong><a href="https://ziweiwu.github.io/react-date-picker/">Try it in Storybook →</a></strong>
+</p>
+
+<p align="center">
+  <sub>Every state below is a live story: pick dates, tab through it, toggle props.</sub>
 </p>
 
 - Built on [react-datepicker](https://github.com/Hacker0x01/react-datepicker) 9
