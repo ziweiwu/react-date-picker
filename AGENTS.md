@@ -14,8 +14,8 @@ change.
 
 ```sh
 npm start          # demo at localhost:5173, imports straight from src/
-npm test           # 23 unit tests (Vitest + Testing Library, jsdom)
-npm run test:e2e   # 7 browser tests (Playwright + axe); needs `npx playwright install chromium`
+npm test           # 40 unit tests (Vitest + Testing Library, jsdom)
+npm run test:e2e   # 28 browser tests (Playwright + axe); needs `npx playwright install chromium`
 npm run lint       # ESLint incl. jsx-a11y
 npm run typecheck  # type-checks src, tests, e2e, demo and configs
 npm run build      # -> es/ (ESM), lib/ (CJS), css/datePicker.css
@@ -48,7 +48,7 @@ the check in the same commit rather than deleting it.
 2. **`readOnly` must NOT be forwarded to `ReactDatePicker`.** Since v9 it also
    suppresses *opening* the calendar (`onInputClick` and `handleFocus` both gate
    on it), not just typing. It is applied to the `<input>` inside
-   `TextField.jsx` instead. This is the single easiest thing to "clean up" and
+   `TextField.tsx` instead. This is the single easiest thing to "clean up" and
    break.
 
 3. **Every instance gets a unique input id**, and `<label for>` resolves to it.
@@ -99,8 +99,8 @@ in the component rather than in the story (invariant 1.5).
 
 Things that look wrong but are correct, and things that look fine but aren't.
 
-**The `@hig/*` packages are vendored on purpose.** `src/TextField.jsx`,
-`src/icons.jsx` and `src/styles/_hig-text-field.scss` are reimplementations of
+**The `@hig/*` packages are vendored on purpose.** `src/TextField.tsx`,
+`src/icons.tsx` and `src/styles/_hig-text-field.scss` are reimplementations of
 `@hig/text-field` and `@hig/icon`. Do not "restore" the dependency: it is
 deprecated and peer-locked to `react ^15.4.1 || ^16.3.2`, and its official
 successor `@hig/input` caps at `react ^17` on end-of-life `emotion@10`. Both
@@ -197,6 +197,13 @@ in real Chromium. A green unit run is not evidence that contrast is fine.
   majors are deliberately ignored — widening the supported range is a decision,
   not a bot PR. Read the grouped dev PRs rather than merging on green: a major
   bump can quietly change test semantics.
+- Two dev majors are pinned back by the ecosystem rather than by this repo, and
+  both are in the Dependabot `ignore` list so they stop reappearing as PRs that
+  can only fail. **eslint 10**: `eslint-plugin-react` and `eslint-plugin-jsx-a11y`
+  still cap their peer range at eslint 9. **TypeScript 7**: `typescript-eslint`
+  caps at `typescript >=4.8.4 <6.1.0`, so the install ERESOLVEs. Check the peer
+  ranges before assuming either is still true — the ignore is a snapshot, and
+  removing it is the point once upstream moves.
 - CI also installs the packed tarball against each supported React major. That
   job is what catches "the peer range is a lie" — trust it over reasoning.
 - When bumping `react-datepicker`, re-read its changelog for prop renames and

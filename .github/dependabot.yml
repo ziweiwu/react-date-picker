@@ -32,6 +32,12 @@ updates:
       # ship eslint 10 support; until then the PR can only ever fail.
       - dependency-name: eslint
         update-types: [version-update:semver-major]
+      # typescript 7 is blocked by the lint toolchain, not by this repo:
+      # typescript-eslint caps its peer range at `typescript >=4.8.4 <6.1.0`
+      # as of 8.67.0, and there is no v9, so the install can only ERESOLVE.
+      # Revisit when typescript-eslint ships TypeScript 7 support.
+      - dependency-name: typescript
+        update-types: [version-update:semver-major]
       # react/react-dom are devDependencies here only so the tests can run.
       # The supported range is declared in peerDependencies, and widening it
       # is a deliberate decision - see AGENTS.md on why React 18 is the floor.

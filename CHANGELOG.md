@@ -3,6 +3,32 @@
 All notable changes to this project are documented here. This project follows
 [Semantic Versioning](https://semver.org/).
 
+## 1.3.1
+
+Development tooling only. **The published JavaScript, CSS and type declarations
+are byte-identical to 1.3.0** - verified by building both trees and diffing
+`es/`, `lib/` and `css/`, which differ only in the absolute paths recorded
+inside `datePicker.css.map`. No runtime dependency moved: `react-datepicker`,
+`@floating-ui/react` and `clsx` were already current, and a consumer install is
+still 13 packages.
+
+- `jsdom` 25 -> 29, the environment behind the unit tests. The jump crosses a
+  CSS selector engine swap (`nwsapi` -> `@asamuzakjp/dom-selector`), a
+  user-agent stylesheet rebased on the HTML Standard, and a CSSOM rewritten on
+  `css-tree` - all three of which feed the `getComputedStyle` and selector
+  matching that axe relies on. The four axe assertions in the unit suite were
+  the reason to be careful, and they still pass unchanged. Held at 29 rather
+  than 30 deliberately: `jsdom@30` requires Node `^22.22.2 || ^24.15.0 || >=26`,
+  which would drop the Node 20 leg of the CI matrix and force `engines.node`
+  above `>=18`. Retiring Node 20 stays a separate decision.
+- `globals` 15 -> 17, `@axe-core/playwright` 4.13.0, `@testing-library/jest-dom`
+  7.0.1, `@testing-library/user-event` 14.6.4, `typescript-eslint` 8.67.0.
+- Dependabot now ignores `typescript` majors, alongside the existing `eslint`
+  entry. `typescript-eslint` caps its peer range at `typescript >=4.8.4 <6.1.0`
+  and has no v9, so a TypeScript 7 PR can only ever `ERESOLVE`. Both blocks are
+  recorded in `AGENTS.md` with the peer ranges that justify them, so the next
+  person re-checks upstream rather than assuming.
+
 ## 1.3.0
 
 Four rounds of adversarial UX and QA review against the running demo. Test
