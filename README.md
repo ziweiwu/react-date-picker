@@ -98,6 +98,7 @@ the exceptions noted under *Reserved* below. The additions are:
 | `showLabel`        | `boolean`               | `true`         | Render the label.                                               |
 | `instruction`      | `string`                | —              | Helper text below the field, linked via `aria-describedby`.     |
 | `showInstruction`  | `boolean`               | `false`        | Render the helper text.                                         |
+| `errors`           | `ReactNode`             | —              | Validation message; also sets `aria-invalid` and error styling. |
 | `placeholder`      | `string`                | —              | Input placeholder.                                              |
 | `showIcon`         | `boolean`               | `true`         | Show the HIG calendar icon.                                     |
 | `showClearButton`  | `boolean`               | `false`        | Show a clear button once a date is selected.                    |

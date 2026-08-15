@@ -98,6 +98,49 @@ describe("DatePicker", () => {
     });
   });
 
+  describe("errors", () => {
+    // `TextField` always rendered these, but no caller could reach them:
+    // `errors` is not a react-datepicker prop, so it never arrived via
+    // `...rest`. Now that DatePicker declares it, keep the wiring covered.
+    it("renders the message and marks the input invalid", () => {
+      render(<DatePicker errors="Pick a weekday" label="Date" />);
+
+      expect(screen.getByText("Pick a weekday")).toBeInTheDocument();
+      expect(getInput()).toHaveAttribute("aria-invalid", "true");
+    });
+
+    it("describes the input with the message", () => {
+      render(<DatePicker errors="Pick a weekday" label="Date" />);
+      expect(getInput()).toHaveAccessibleDescription("Pick a weekday");
+    });
+
+    it("describes the input with both the instruction and the message", () => {
+      render(
+        <DatePicker
+          errors="Pick a weekday"
+          instruction="Choose a date"
+          label="Date"
+          showInstruction
+        />,
+      );
+      expect(getInput()).toHaveAccessibleDescription(
+        "Choose a date Pick a weekday",
+      );
+    });
+
+    it("leaves the input valid when there is no message", () => {
+      render(<DatePicker label="Date" />);
+      expect(getInput()).not.toHaveAttribute("aria-invalid");
+    });
+
+    it("has no axe violations while showing an error", async () => {
+      const { container } = render(
+        <DatePicker errors="Pick a weekday" label="Date" selected={SEPT_15} />,
+      );
+      expect(await axeViolations(container)).toEqual([]);
+    });
+  });
+
   describe("keyboard accessibility", () => {
     it("exposes a focusable, read-only input rather than a disabled one", async () => {
       // Regression: 0.x always passed `disabled` to the text field, which made

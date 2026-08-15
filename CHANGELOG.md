@@ -3,6 +3,58 @@
 All notable changes to this project are documented here. This project follows
 [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+Four rounds of adversarial UX and QA review against the running demo. Test
+count went from 35 unit / 9 browser to 40 unit / 28 browser.
+
+### Added
+
+- **`errors`** renders a validation message, marks the input `aria-invalid` and
+  adds the message to the input's accessible description. `TextField` had
+  rendered all of this since it was vendored, but `errors` is not a
+  react-datepicker prop so it never reached the field through `...rest` - the
+  styling was unreachable dead code.
+
+### Fixed
+
+- **The calendar could render off the top of the screen.** The comment on
+  `popperModifiers` claimed the configuration disabled flipping. It never did:
+  react-datepicker always prepends its own `flip`, and its `popperProps`
+  escape hatch is typed to forbid replacing the middleware. On a 1280x350
+  viewport the calendar landed at `y = -133`, putting the month header and both
+  navigation buttons out of reach. A `size` middleware now caps the calendar to
+  the space actually available, which keeps it on screen and usually lets it
+  stay below the field after all.
+- **Keyboard focus could scroll out of sight.** Capping the height makes the
+  calendar a scroll container, and react-datepicker focuses day cells with
+  `preventScroll: true`. Arrow-key navigation now scrolls the focused day back
+  into view.
+- **Opening the calendar could widen the page.** Between 261px and 272px the
+  calendar hung over the right edge, because `size` measured from the viewport
+  edge while `shift` had already moved the calendar 15px in. Opening the
+  calendar now adds no horizontal overflow at any width.
+- **A critical `aria-required-children` violation on most months.** `fixedHeight`
+  pads a short month to six week rows; hiding that row's cells one at a time
+  left an empty `role="row"` behind. It affected 28 of the 36 months in
+  2025-2027, and the axe test only ever saw whichever month CI ran in. Such a
+  row is now hidden whole, and a test pins the clock to a month that has one.
+- **Month navigation was a 15x15 target**, meeting WCAG 2.5.8 only through the
+  spacing exception. It is now 25x25, with the caret glyph unmoved.
+- **The instruction text was restyled as an error** whenever `errors` was set,
+  so the hint and the error message looked identical. Only the error carries
+  the error treatment now, and a focused field in error keeps a visible 2px
+  underline instead of losing it to declaration order.
+
+### Changed
+
+- `INVARIANTS.md` corrected where it described behaviour the code did not have:
+  Escape keeps focus on the field (react-datepicker stopped blurring it), and
+  the calendar's placement below the field is a preference rather than a
+  guarantee. Upstream deviations that will not be fixed - the arrow-key gate on
+  the input, and month navigation being outside the Tab sequence - are now
+  recorded as such.
+
 ## 1.2.0
 
 Adds `INVARIANTS.md`, a behavioural specification of what the component is

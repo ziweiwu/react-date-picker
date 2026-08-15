@@ -46,10 +46,55 @@
   // The calendar is a control surface, not prose: dragging across it should
   // not select text.
   user-select: none;
+
+  // The floating-ui `size` middleware in DatePicker.tsx measures the space
+  // available at the placement react-datepicker's `flip` chose and publishes
+  // it here. Without the cap a calendar taller than that space was positioned
+  // partly outside the viewport, putting the month header and the navigation
+  // buttons out of reach on short screens.
+  //
+  // It is applied to the calendar rather than the popper because the popper
+  // also holds the arrow, which sits outside its box and would be clipped by
+  // an `overflow` there. `auto` only produces a scrollbar once the cap
+  // actually bites, so the usual case is unchanged.
+  // `border-box` so the caps below mean what they say. react-datepicker gives
+  // the calendar a 1px border and leaves box-sizing alone, so a `max-width` of
+  // 255px produced a 257px box - enough to keep a 2px page overflow alive at
+  // the narrow end. The natural size is content-driven, so this changes
+  // nothing except how the two caps are measured.
+  box-sizing: border-box;
+  max-height: var(--hig-datepicker-available-height, none);
+  max-width: var(--hig-datepicker-available-width, none);
+  overflow: auto;
 }
 
 // Hide leading/trailing days from adjacent months, as in 0.x.
 .react-datepicker__day--outside-month {
+  visibility: hidden;
+}
+
+// `fixedHeight` pads every month out to six week rows so the calendar's height
+// never changes as you page through months. When a month only needs five, the
+// sixth row consists entirely of adjacent-month days - every one of them
+// hidden by the rule above, leaving a `role="row"` with no perceivable cells.
+// axe reports that as a critical `aria-required-children` violation, and it
+// affects roughly three months in four (28 of the 36 months from 2025 to
+// 2027), so whether CI saw it came down to which month it happened to run in.
+//
+// Hiding the row itself takes it out of the accessibility tree, while
+// `visibility: hidden` still reserves its height - which is the entire point
+// of `fixedHeight`. The selector keys off "has no day that belongs to this
+// month" rather than a row index, because the number of padding rows varies:
+// most short months need one, but a 28-day February beginning on a Sunday
+// (February 2026) is an exact four weeks and gets two.
+//
+// Under `showWeekNumbers` the row's week-number cell is hidden along with it.
+// That is the intended result - a lone week number floating beside a row of
+// blank cells would be worse - but note it is a consequence of hiding the
+// whole row, not something the selector inspects.
+.react-datepicker__week:not(
+  :has(.react-datepicker__day:not(.react-datepicker__day--outside-month))
+) {
   visibility: hidden;
 }
 
@@ -151,14 +196,25 @@
 
 .react-datepicker__navigation {
   position: absolute;
-  top: 15px;
+  // WCAG 2.5.8 Target Size (Minimum) wants 24x24 CSS px. The HIG caret is a
+  // 15px glyph, which only cleared the criterion on the spacing exception -
+  // nothing sits within 24px of it - and was still a poor touch target.
+  // Padding grows the hit area to 25x25 while leaving the caret alone:
+  // `content-box` keeps `width`/`height` describing the glyph even when the
+  // host page applies a global `border-box` reset, and `background-origin`
+  // keeps `background-size: contain` scaling to the glyph box rather than the
+  // padded one. `top` and the horizontal margins give back the 5px the
+  // padding adds, so the caret stays exactly where it was.
+  box-sizing: content-box;
+  top: 10px;
   z-index: 1;
   width: 15px;
   height: 15px;
-  padding: 0;
+  padding: 5px;
   border: none;
   background-color: transparent;
   background-repeat: no-repeat;
+  background-origin: content-box;
   background-position: center;
   background-size: contain;
   text-align: center;
@@ -176,7 +232,7 @@
   }
 
   &--previous {
-    margin-left: 8px;
+    margin-left: 3px;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpolygon points='3.65 8.09 9.95 1.79 11.72 3.56 7.18 8.09 11.72 12.63 9.95 14.4 3.65 8.09'/%3E%3C/svg%3E");
 
     &:hover {
@@ -185,7 +241,7 @@
   }
 
   &--next {
-    margin-right: 8px;
+    margin-right: 3px;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpolygon points='4.28 12.63 8.82 8.09 4.28 3.56 6.05 1.79 12.35 8.09 6.05 14.4 4.28 12.63'/%3E%3C/svg%3E");
 
     &:hover {

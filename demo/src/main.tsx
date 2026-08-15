@@ -6,6 +6,7 @@ import "../../src/styles/datePicker.scss";
 function Demo() {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [rangeStart, setRangeStart] = useState<Date | null>(null);
+  const [invalid, setInvalid] = useState<Date | null>(null);
 
   return (
     <main style={{ fontFamily: "sans-serif", margin: "2rem", maxWidth: 640 }}>
@@ -29,6 +30,23 @@ function Demo() {
       <section>
         <h2>Disabled</h2>
         <DatePicker disabled label="Unavailable" selected={startDate} />
+      </section>
+
+      {/*
+        Rendered here so the Playwright suite exercises the error state in a
+        real browser. jsdom cannot measure colour contrast, so an error state
+        that only ever appeared in the unit tests was never contrast-checked.
+      */}
+      <section>
+        <h2>With a validation error</h2>
+        <DatePicker
+          errors="Choose a date in the future"
+          instruction="Bookings open 30 days ahead"
+          label="Return date"
+          onChange={setInvalid}
+          selected={invalid}
+          showInstruction
+        />
       </section>
 
       <section>
